@@ -16,6 +16,11 @@ class SoldierAuthorizer(DummyAuthorizer):
         if not user:
             raise AuthenticationFailed
 
+    def get_home_dir(self, username):
+        """Return the user's home directory.
+        """
+        return self.user_table[username]['home']
+
 
 def main():
     django.setup()
