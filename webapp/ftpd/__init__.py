@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import os
-import sys
 import django
 
+from django.conf import settings
 from django.contrib.auth import authenticate
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer
@@ -19,7 +19,13 @@ class SoldierAuthorizer(DummyAuthorizer):
     def get_home_dir(self, username):
         """Return the user's home directory.
         """
-        return self.user_table[username]['home']
+        homedir = os.path.join(settings.FTPD_ROOT_DIR, username)
+        if not os.path.isdir(homedir):
+            os.makedirs(homedir)
+        return homedir
+
+    def get_msg_login(self, username):
+        return "Welcome back {}".format(username)
 
 
 def main():
@@ -27,6 +33,5 @@ def main():
     authorizer = SoldierAuthorizer()
     handler = FTPHandler
     handler.authorizer = authorizer
-    server = FTPServer(('', 2121), handler)
+    server = FTPServer(('', settings.FTPD_PORT), handler)
     server.serve_forever()
-
