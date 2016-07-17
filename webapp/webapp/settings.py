@@ -122,6 +122,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Fixtures
+FIXTURE_DIRS = os.path.abspath(BASE_DIR + '../fixtures')
+
 # FTPD Server
-FTPD_ROOT_DIR = '/tmp/ftpd'
+FTPD_ROOT = '/tmp/ftpd'
 FTPD_PORT = 2121

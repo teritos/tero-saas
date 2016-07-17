@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import os
 import django
 
 from django.conf import settings
@@ -9,28 +8,30 @@ from pyftpdlib.servers import FTPServer
 from pyftpdlib.authorizers import DummyAuthorizer, AuthenticationFailed
 
 
-class SoldierAuthorizer(DummyAuthorizer):
+class FTPAuthorizer(DummyAuthorizer):
+
+    user_table = {}
 
     def validate_authentication(self, username, password, handler):
         user = authenticate(username=username, password=password)
         if not user:
             raise AuthenticationFailed
-
-    def get_home_dir(self, username):
-        """Return the user's home directory.
-        """
-        homedir = os.path.join(settings.FTPD_ROOT_DIR, username)
-        if not os.path.isdir(homedir):
-            os.makedirs(homedir)
-        return homedir
-
-    def get_msg_login(self, username):
-        return "Welcome back {}".format(username)
+        perm = 'elw'  # CWD, LIST and STOR
+        homedir = user.ftpuser.homedir
+        msg_login = 'Welcome aboard user!'
+        msg_quit = 'See you soon!'
+        dic = {'home': homedir,
+               'perm': perm,
+               'operms': {},
+               'msg_login': str(msg_login),
+               'msg_quit': str(msg_quit)
+               }
+        self.user_table[username] = dic
 
 
 def main():
     django.setup()
-    authorizer = SoldierAuthorizer()
+    authorizer = FTPAuthorizer()
     handler = FTPHandler
     handler.authorizer = authorizer
     server = FTPServer(('', settings.FTPD_PORT), handler)
