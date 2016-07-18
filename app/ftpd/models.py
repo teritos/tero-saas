@@ -18,4 +18,4 @@ class FTPUser(models.Model):
         return path
 
     def __str__(self):
-        return self.user
+        return "{}".format(self.user)
