@@ -29,10 +29,19 @@ class FTPAuthorizer(DummyAuthorizer):
         self.user_table[username] = dic
 
 
+class MyFTPHandler(FTPHandler):
+
+    def on_file_received(self, file):
+        print(file)
+
+    def on_incomplete_file_received(self, file):
+        print(file)
+
+
 def main():
     django.setup()
     authorizer = FTPAuthorizer()
-    handler = FTPHandler
+    handler = MyFTPHandler
     handler.authorizer = authorizer
     server = FTPServer(('', settings.FTPD_PORT), handler)
     server.serve_forever()
