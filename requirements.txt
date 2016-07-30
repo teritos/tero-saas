@@ -1,2 +1,3 @@
 pyftpdlib
 django
+python-telegram-bot
