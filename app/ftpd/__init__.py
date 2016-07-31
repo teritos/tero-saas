@@ -31,11 +31,17 @@ class FTPAuthorizer(DummyAuthorizer):
 
 class MyFTPHandler(FTPHandler):
 
+    def get_user_alarm(self):
+        from webapp.models import UserProfile
+        user_profile = UserProfile.objects.get(user__username=self.username)
+        return user_profile.alarm
+
     def on_file_received(self, file):
-        print(file)
+        alarm = self.get_user_alarm()
+        alarm.notify.motion_detected(file)
 
     def on_incomplete_file_received(self, file):
-        print(file)
+        alarm.notify.motion_detected(file)
 
 
 def main():

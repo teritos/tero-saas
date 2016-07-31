@@ -89,3 +89,4 @@ ENV/
 .ropeproject
 tags
 site-packages
+db.sqlite3

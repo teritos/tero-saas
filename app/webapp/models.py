@@ -35,8 +35,30 @@ class AlarmProfile(models.Model):
         self.active = False
         self.save()
 
+    def get_users_to_notify(self):
+        """Return a list of user profiles that should be notified"""
+        return UserProfile.objects.filter(alarm=self).all()
+
     def __str__(self):
         return "{} - {}".format(self.id, self.active)
+
+
+class Notifier(object):
+
+    def __init__(self, user_profile):
+        self.user_profile = user_profile
+
+    def motion_detected(self, file):
+        user_profile = self.user_profile
+        alarm = user_profile.alarm
+
+        if alarm.active:
+            # Get all user profiles that should be notified
+            msg = "Movimiento detectado!"            
+            for user_profile in alarm.get_users_to_notify:
+                if user_profile.has_telegram:
+                    user_profile.telegram.send_message(msg)
+                    user_profile.telegram.send_photo(file)
 
 
 class UserProfile(models.Model):
@@ -53,7 +75,9 @@ class UserProfile(models.Model):
     def create(cls, username, password, ftpd=True, alarm_profile=None, telegram_user=True, **kwargs):
         """Create a basic user."""
         from ftpd.models import FTPUser
-        user = User.objects.create(username=username, password=password)
+        user = User.objects.create(username=username)
+        user.set_password(password)
+        user.save()
 
         if ftpd and not FTPUser.objects.filter(user=user).exists():
             from ftpd.models import FTPUser
@@ -75,6 +99,14 @@ class UserProfile(models.Model):
             telegram=bot)
 
         return user_profile
+
+    @property
+    def has_telegram(self):
+        return self.telegram
+
+    @property
+    def notify(self):
+        return Notifier(user_profile=self)
     
     def __str__(self):
         return "{}".format(self.user)
