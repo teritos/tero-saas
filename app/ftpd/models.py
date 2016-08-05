@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class FTPUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
-    permissions = models.CharField(max_length=20, default='elwm')
+    permissions = models.CharField(max_length=20, default='elradfmwM')
 
     @property
     def homedir(self):

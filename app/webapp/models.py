@@ -13,10 +13,10 @@ class TelegramProfile(models.Model):
         return telegram.Bot(token=self.bot_token)
 
     def send_message(self, message):
-        self.bot.sendMessage(chat_id=id_, text='Movimiento detectado en casa! Archivo incompleto')
+        self.bot.sendMessage(chat_id=self.chat_id, text=message)
         
     def send_photo(self, path):
-        self.bot.sendPhoto(id_, photo=open(path, 'rb'))
+        self.bot.sendPhoto(chat_id=self.chat_id, photo=open(path, 'rb'))
 
     def __str__(self):
         return "{}".format(self.chat_id)
@@ -35,30 +35,22 @@ class AlarmProfile(models.Model):
         self.active = False
         self.save()
 
+    def notify_motion_detected(self, file):
+        msg = "Movimiento detectado!"            
+        if self.active:
+            # Get all user profiles that should be notified
+            users_to_notify = self.get_users_to_notify()
+            for user_profile in users_to_notify:
+                if user_profile.has_telegram:
+                    user_profile.telegram.send_message(msg)
+                    user_profile.telegram.send_photo(file)
+
     def get_users_to_notify(self):
         """Return a list of user profiles that should be notified"""
         return UserProfile.objects.filter(alarm=self).all()
 
     def __str__(self):
         return "{} - {}".format(self.id, self.active)
-
-
-class Notifier(object):
-
-    def __init__(self, user_profile):
-        self.user_profile = user_profile
-
-    def motion_detected(self, file):
-        user_profile = self.user_profile
-        alarm = user_profile.alarm
-
-        if alarm.active:
-            # Get all user profiles that should be notified
-            msg = "Movimiento detectado!"            
-            for user_profile in alarm.get_users_to_notify:
-                if user_profile.has_telegram:
-                    user_profile.telegram.send_message(msg)
-                    user_profile.telegram.send_photo(file)
 
 
 class UserProfile(models.Model):
@@ -103,10 +95,6 @@ class UserProfile(models.Model):
     @property
     def has_telegram(self):
         return self.telegram
-
-    @property
-    def notify(self):
-        return Notifier(user_profile=self)
     
     def __str__(self):
         return "{}".format(self.user)

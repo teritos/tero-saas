@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import django
+import threading
 
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -16,7 +17,7 @@ class FTPAuthorizer(DummyAuthorizer):
         user = authenticate(username=username, password=password)
         if not user:
             raise AuthenticationFailed
-        perm = 'elw'  # CWD, LIST and STOR
+        perm = 'elradfmwM'  # CWD, LIST and STOR
         homedir = user.ftpuser.homedir
         msg_login = 'Welcome aboard user!'
         msg_quit = 'See you soon!'
@@ -38,10 +39,15 @@ class MyFTPHandler(FTPHandler):
 
     def on_file_received(self, file):
         alarm = self.get_user_alarm()
-        alarm.notify.motion_detected(file)
+        t = threading.Thread(target=alarm.notify_motion_detected, args=(file,))
+        t.start()
+        # alarm.notify_motion_detected(file)
 
     def on_incomplete_file_received(self, file):
-        alarm.notify.motion_detected(file)
+        alarm = self.get_user_alarm()
+        # alarm.notify_motion_detected(file)
+        t = threading.Thread(target=alarm.notify_motion_detected, args=(file,))
+        t.start()
 
 
 def main():
