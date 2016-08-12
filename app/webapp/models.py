@@ -45,6 +45,9 @@ class AlarmProfile(models.Model):
                 if user_profile.has_telegram:
                     user_profile.telegram.send_message(msg)
                     user_profile.telegram.send_photo(file)
+        else:
+            # Keep hard drive space
+            os.remove(file)
 
     def get_users_to_notify(self):
         """Return a list of user profiles that should be notified"""
