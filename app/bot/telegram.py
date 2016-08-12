@@ -31,7 +31,7 @@ def main():
         """Activate alarm"""
         user_profile = get_user_profile(update.message.chat_id)
         if user_profile is None:
-            logger.info('no user found with chat_id {}'.format(chat_id))
+            logger.info('no user found with chat_id {}'.format(update.message.chat_id))
             return
         user_profile.alarm.activate()
         bot.sendMessage(update.message.chat_id, text='Alarma activada :)')
@@ -40,7 +40,7 @@ def main():
         """Deactivate alarm"""
         user_profile = get_user_profile(update.message.chat_id)
         if user_profile is None:
-            logger.info('no user found with chat_id {}'.format(chat_id))
+            logger.info('no user found with chat_id {}'.format(update.message.chat_id))
             return
         user_profile.alarm.deactivate()
         bot.sendMessage(update.message.chat_id, text='Alarma desactivada :)')
