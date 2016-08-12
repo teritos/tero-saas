@@ -49,7 +49,7 @@ def main():
         """Return alarm status"""
         user_profile = get_user_profile(update.message.chat_id)
         if user_profile is None:
-            logger.info('no user found with chat_id {}'.format(chat_id))
+            logger.info('no user found with chat_id {}'.format(update.message.chat_id))
             return
         status = user_profile.alarm.active
         msg_status = 'Alarma desactivada' if status is False else 'Alarma esta activa'
