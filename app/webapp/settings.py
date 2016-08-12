@@ -37,8 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
+
+INSTALLED_APPS += [
     'webapp',
     'ftpd',
+    'bot',
 ]
 
 MIDDLEWARE_CLASSES = [

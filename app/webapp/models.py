@@ -6,6 +6,7 @@ import telegram
 class TelegramProfile(models.Model):
     bot_token = models.CharField(max_length=255)
     chat_id = models.CharField(max_length=255)
+    # name = models.CharField(max_length=255)
 
     @property
     def bot(self):
@@ -14,7 +15,7 @@ class TelegramProfile(models.Model):
 
     def send_message(self, message):
         self.bot.sendMessage(chat_id=self.chat_id, text=message)
-        
+
     def send_photo(self, path):
         self.bot.sendPhoto(chat_id=self.chat_id, photo=open(path, 'rb'))
 
@@ -30,13 +31,13 @@ class AlarmProfile(models.Model):
     def activate(self):
         self.active = True
         self.save()
-    
+
     def deactivate(self):
         self.active = False
         self.save()
 
     def notify_motion_detected(self, file):
-        msg = "Movimiento detectado!"            
+        msg = "Movimiento detectado!"
         if self.active:
             # Get all user profiles that should be notified
             users_to_notify = self.get_users_to_notify()
@@ -59,7 +60,7 @@ class UserProfile(models.Model):
     telegram = models.OneToOneField(
         TelegramProfile,
         null=True,
-        blank=True, 
+        blank=True,
         on_delete=models.CASCADE
         )
 
@@ -82,7 +83,7 @@ class UserProfile(models.Model):
             telegram_token = kwargs['telegram_token']
             telegram_chat_id = kwargs['telegram_chat_id']
             bot = TelegramProfile.objects.create(
-                bot_token=telegram_token, 
+                bot_token=telegram_token,
                 chat_id=telegram_chat_id)
 
         user_profile = cls.objects.create(
@@ -95,6 +96,6 @@ class UserProfile(models.Model):
     @property
     def has_telegram(self):
         return self.telegram
-    
+
     def __str__(self):
         return "{}".format(self.user)
