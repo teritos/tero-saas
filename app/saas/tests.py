@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from webapp.models import (
+from core.models import (
     TelegramProfile,
     AlarmProfile,
     UserProfile
@@ -29,7 +29,7 @@ class TestUserProfile(TestCase):
         user_profile.alarm.activate()
         self.assertTrue(user_profile.alarm.active == True)
         self.assertTrue(user_profile2.alarm.active == True)
-        
+
         user_profile2.alarm.deactivate()
         self.assertTrue(user_profile.alarm.active == False)
         self.assertTrue(user_profile2.alarm.active == False)

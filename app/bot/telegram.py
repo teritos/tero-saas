@@ -1,5 +1,5 @@
 from telegram.ext import Updater, CommandHandler
-from webapp.models import UserProfile
+from core.models import UserProfile
 import logging
 import os
 

@@ -24,7 +24,7 @@ Just execute:
 CONFIGURE
 ---------
 
-You can modify 'webapp/settings.py' the following settings:
+You can modify 'saas/settings.py' the following settings:
 FTPD_PORT = 2121                FTPD server will listen in this port
 FTPD_ROOT = '/path/to/dir'      All FTPD users will be created 
                                 under this path

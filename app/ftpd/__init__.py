@@ -33,7 +33,7 @@ class FTPAuthorizer(DummyAuthorizer):
 class MyFTPHandler(FTPHandler):
 
     def get_user_alarm(self):
-        from webapp.models import UserProfile
+        from core.models import UserProfile
         user_profile = UserProfile.objects.get(user__username=self.username)
         return user_profile.alarm
 
