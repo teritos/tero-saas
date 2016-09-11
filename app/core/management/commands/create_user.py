@@ -32,7 +32,6 @@ class Command(BaseCommand):
             help='Telegram BOT ID',
         )
 
-
     def handle(self, *args, **options):
         username = options['username']
         password = options['password']
