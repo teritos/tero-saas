@@ -69,31 +69,48 @@ class UserProfile(models.Model):
         )
 
     @classmethod
-    def create(cls, username, password, ftpd=True, alarm_profile=None, telegram_user=True, **kwargs):
-        """Create a basic user."""
-        from ftpd.models import FTPUser
+    def create(cls, username, password, alarm=None, ftpd=False, **kwargs):
+        """Create a basic user.
+
+        Arguments:
+            username(bytes):        username
+            passowrd:               password
+            alarm;                  AlarmProfile instance
+            ftpd:                   Set to True if you want to create an FTP account
+                                    for this user.
+
+        Keyword Arguments:
+            telegram_token:         Your telegram account ID
+            telegram_chat_id:       Your telegram BOT id.
+                                    If telegram_token and telegram_chat_id are
+                                    defined, Tero creates a TelegramProfile for
+                                    this user.
+        """
         user = User.objects.create(username=username)
         user.set_password(password)
         user.save()
 
-        if ftpd and not FTPUser.objects.filter(user=user).exists():
+        if ftpd:
             from ftpd.models import FTPUser
-            FTPUser.objects.create(user=user)
+            if not FTPUser.objects.filter(user=user).exists():
+                FTPUser.objects.create(user=user)
 
-        if not alarm_profile:
-            alarm_profile = AlarmProfile.objects.create()
+        if alarm is None:
+            alarm = AlarmProfile.objects.create()
 
-        if telegram_user:
-            telegram_token = kwargs['telegram_token']
-            telegram_chat_id = kwargs['telegram_chat_id']
+        telegram_token = kwargs.get('telegram_token')
+        telegram_chat_id = kwargs.get('telegram_chat_id')
+        bot = None
+        if telegram_token and telegram_chat_id:
             bot = TelegramProfile.objects.create(
                 bot_token=telegram_token,
                 chat_id=telegram_chat_id)
 
         user_profile = cls.objects.create(
             user=user,
-            alarm=alarm_profile,
-            telegram=bot)
+            alarm=alarm,
+            telegram=bot
+        )
 
         return user_profile
 
