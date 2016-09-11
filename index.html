@@ -36,6 +36,45 @@
 <li>Una maquina donde instalar y dejar corriendo a <strong>Tero</strong> (por ej: un VPS de 5 USD de Digital Ocean funciona genial!)</li>
 </ul>
 
+<h2 id="instalar">Instalar</h2>
+<ol type="1">
+<li><p>Crea un virtualenv (debes tener instalado virtualenvwrapper) para instalar <strong>Tero</strong> con el comando:</p>
+<blockquote>
+<p><code>$ mkvirtualenv tero</code></p>
+</blockquote></li>
+<li><p>Teniendo el virtualenv activo, instala las dependencias:</p>
+<blockquote>
+<p><code>$ pip install -r requirements.txt</code></p>
+</blockquote></li>
+<li><p>Crea la base de datos, tablas, etc. Por default se utiliza sqlite:</p>
+<blockquote>
+<p><code>$ ./manage.py migrate</code></p>
+</blockquote></li>
+<li><p>Corre el servidor FTPd (donde las cámaras IP enviaran las imágenes) con el comando:</p>
+<blockquote>
+<p><code>$ ./manage.py run_ftpd</code></p>
+</blockquote></li>
+<li><p>(Opcional) - Si deseas configurar los usuarios utilizando el admin de Django, corre el comando:</p>
+<blockquote>
+<p><code>$ ./manage.py runserver</code></p>
+</blockquote></li>
+</ol>
+<h2 id="deploys-y-configuraciones">Deploys y configuraciones</h2>
+<p>Estas utilizando <strong>Tero</strong>? Comparte tus configuraciones, comentarios, etc enviando un Pull Request al branch 'gh-pages' o bien envíame un email! :)</p>
+<p><a href="stories/tpnc220.html">Tero con camaras IP TpLink nc220</a></p>
+<h2 id="configurando-usuarios-y-alarmas">Configurando usuarios y alarmas</h2>
+<p><strong>Tero</strong> provee algunos comandos que pueden ser ejecutados desde la consola.</p>
+<ol type="1">
+<li><p>Para agregar usuarios utiliza:</p>
+<blockquote>
+<p><code>$ ./manage.py create_user --help</code></p>
+</blockquote></li>
+<li><p>Para borrar un usuario utiliza:</p>
+<blockquote>
+<p><code>$ ./manage.py rm_user --help</code></p>
+</blockquote></li>
+</ol>
+
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/edvm/tero">Tero</a> is maintained by <a href="https://github.com/edvm">edvm</a>.</span>
 
