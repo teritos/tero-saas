@@ -59,6 +59,43 @@
 <p><code>$ ./manage.py runserver</code></p>
 </blockquote></li>
 </ol>
+
+<h2 id="como-funciona">Como funciona</h2>
+<ol type="1">
+<li>Instalas <strong>Tero</strong> y arrancas el servidor FTPd (el admin de django es opcional).</li>
+<li>Si no tienes una cuenta de <strong>Telegram</strong>, tienes que crear una. Al momento <strong>Tero</strong> solo sabe notificarte mediante <strong>Telegram</strong>. También activaras y desactivaras la alarma utilizando <strong>Telegram</strong>.</li>
+<li>Agrega/configura los usuarios de tu alarma <strong>Tero</strong> mediante la linea de comando o utilizando el admin de Django. Recuerda que puedes asociar una misma alarma a varios usuarios, esto posibilita por ejemplo que toda tu familia pueda activar/desactivar y recibir alertas de la alarma de tu casa (relacionas diferentes <em>UserProfile</em> al mismo objeto <em>AlarmProfile</em>).</li>
+</ol>
+<p><strong>Tero</strong> vigila tu casa en tres etapas:</p>
+<blockquote>
+<ul>
+<li>Las cámaras IP cuando detectan movimiento envían las imágenes al servidor FTP de Tero.</li>
+<li>Si la alarma se encuentra activa, y <strong>Tero</strong> recibe una imagen desde las cámaras, enviara la imagen por Telegram a las personas (<em>UserProfile</em>) que hayas relacionado con el <em>AlarmProfile</em>. Si la alarma se encuentra desactivada, Tero borrara la imagen enviada por la cámara y no envía ninguna notificación.</li>
+<li><dl>
+<dt>El bot de Telegram que has creado/configurado en <strong>Tero</strong>, te permite:</dt>
+<dd><ul>
+<li>Activar la alarma escribiendo: <strong>/ac</strong> o bien <strong>/activate</strong></li>
+<li>Desactivar la alarma escribiendo: <strong>/de</strong> o bien <strong>/deactivate</strong></li>
+<li>Conocer el status de la alarma con el comando: <strong>/st</strong> o bien <strong>/status</strong></li>
+</ul>
+</dd>
+</dl></li>
+</ul>
+</blockquote>
+<h1 id="estado-del-proyecto">Estado del proyecto</h1>
+<p>Actualmente estoy utilizando <strong>Tero</strong> en casa, y me da mas tranquilidad tenerlo funcionando que no tener nada. Igualmente <strong>Tero</strong> es un prototipo, le faltan <strong>MUCHAS</strong> cosas, por lo cual tu contribución es bienvenida!</p>
+<dl>
+<dt>Algunas features que me gustaría Tero tenga próximamente son:</dt>
+<dd><ul>
+<li>Haga sonar una alarma/buzzer. Si puede hacer el sonido de 'tero tero!' aun mejor!</li>
+<li>Procesamiento de imagenes para descartar falsos positivos (hay veces que se cruzan bichitos y hacen trigger de la alarma jeje)</li>
+<li>Una versión que corra en RPi/C.H.I.P/Omega2, mas que nada para activar/desactivar el buzzer</li>
+<li>Un API Rest para interactuar con <strong>Tero</strong></li>
+</ul>
+</dd>
+</dl>
+<p>Contribuciones e ideas son bienvenidos! Si estas usando Tero no olvides compartir el como lo estas utilizando enviando un Pull Request al branch 'gh-pages', o por email :). Voy a ir agregando la info en: <a href="#deploys-y-configuraciones">Deploys y Configuraciones</a></p>
+
 <h2 id="deploys-y-configuraciones">Deploys y configuraciones</h2>
 <p>Estas utilizando <strong>Tero</strong>? Comparte tus configuraciones, comentarios, etc enviando un Pull Request al branch 'gh-pages' o bien envíame un email! :)</p>
 <p><a href="stories/tpnc220.html">Tero con camaras IP TpLink nc220</a></p>
