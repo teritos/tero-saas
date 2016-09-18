@@ -90,3 +90,5 @@ ENV/
 tags
 site-packages
 db.sqlite3
+
+settings.yaml
