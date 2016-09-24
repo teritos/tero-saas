@@ -9,7 +9,7 @@ class UserService(object):
         self.frula = frula 
         self.foo = foo
 
-    def ping(self):
+    def create_user(self):
         print('ping ping ping!')
 
 
