@@ -10,7 +10,3 @@ fixtures
 ftpd
 	- FTPd server that receives IP Webcam's (or other sensors) data
 	  by ftp and notify the user alarm
-saas
-	- Will be used if you want to deploy the project as
-	  Software As a Service. Right now it gives you a django admin where
-	  you can (hostile) manage alarms, users, etc.
