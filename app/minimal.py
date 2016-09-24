@@ -17,6 +17,12 @@ conf = yaml.load(open(os.path.join(BASE_DIR, 'settings.yaml'), 'r'))
 settings.configure(
     DEBUG=True,
     SECRET_KEY='A-random-secret-key!',
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    },
     ROOT_URLCONF=sys.modules[__name__],
     FTPD_HOST=conf['FTPD']['HOST'],
     FTPD_PORT=conf['FTPD']['PORT'],
@@ -25,6 +31,7 @@ settings.configure(
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'ftpd',
+        'core',
     ]
 )
 
