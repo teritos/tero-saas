@@ -26,6 +26,7 @@ class TelegramProfile(models.Model):
 
 class AlarmProfile(models.Model):
     active = models.BooleanField(default=False)
+    name = models.CharField(max_length=80, null=True, blank=True)
     last_modified = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
@@ -54,8 +55,14 @@ class AlarmProfile(models.Model):
         """Return a list of user profiles that should be notified"""
         return UserProfile.objects.filter(alarm=self).all()
 
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = str(self.id)
+
+        super(AlarmProfile, self).save(*args, **kwargs)
+
     def __str__(self):
-        return "{} - {}".format(self.id, self.active)
+        return "{} - {}".format(self.name or self.id, self.active)
 
 
 class UserProfile(models.Model):
@@ -95,8 +102,7 @@ class UserProfile(models.Model):
             if not FTPUser.objects.filter(user=user).exists():
                 FTPUser.objects.create(user=user)
 
-        if alarm is None:
-            alarm = AlarmProfile.objects.create()
+        alarm, created = AlarmProfile.objects.get_or_create(name=alarm)
 
         telegram_token = kwargs.get('telegram_token')
         telegram_chat_id = kwargs.get('telegram_chat_id')
