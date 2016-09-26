@@ -16,6 +16,15 @@ class Command(BaseCommand):
             default=False,
             help='Create an ftp account for this user',
         )
+
+        parser.add_argument(
+            '--alarm',
+            action='store',
+            dest='alarm',
+            default=None,
+            help='Alarm name',
+        )
+
         parser.add_argument(
             '--telegram-id',
             action='store',
@@ -36,19 +45,25 @@ class Command(BaseCommand):
         username = options['username']
         password = options['password']
         ftpd=False
+        alarm = options['alarm']
+
         telegram_token = options['telegram_token']
         telegram_chat_id = options['telegram_bot_id']
+
         if UserProfile.objects.filter(user__username=username).exists():
             print('User [{}] already exists,'
                   ' please choose another username.\n'.format(username))
             return
+
         user_profile = UserProfile.create(
             username=username,
             password=password,
+            alarm=alarm,
             ftpd=ftpd,
             telegram_token=telegram_token,
             telegram_chat_id=telegram_chat_id
         )
+
         print('User [{}] AlarmProfile [{}] created!\n'.format(
-            user_profile.id, user_profile.alarm.id
+            user_profile, user_profile.alarm
         ))

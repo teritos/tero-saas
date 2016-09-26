@@ -7,6 +7,7 @@ import os
 class Alarm(models.Model):
     """An alarm """
 
+    name = models.CharField(max_length=80, null=True, blank=True)
     active = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
@@ -22,8 +23,14 @@ class Alarm(models.Model):
     def motion_detected(self, filepath=None):
         signals.motion_detected.send(sender=self.__class__, active=self.active)
 
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = str(self.id)
+
+        super(Alarm, self).save(*args, **kwargs)
+
     def __str__(self):
-        return "{} - {}".format(self.id, self.active)
+        return "{} - {}".format(self.name or self.id, self.active)
 
 
 class UserProfile(models.Model):
@@ -50,10 +57,13 @@ class UserProfile(models.Model):
             if not FTPUser.objects.filter(user=user).exists():
                 FTPUser.objects.create(user=user)
 
-        if alarm is None:
-            alarm = Alarm.objects.create()
+        alarm, created = Alarm.objects.get_or_create(name=alarm)
 
-        user_profile = cls.objects.create(user=user, alarm=alarm)
+        user_profile = cls.objects.create(
+            user=user,
+            alarm=alarm,
+            telegram=bot
+        )
 
         return user_profile
 
