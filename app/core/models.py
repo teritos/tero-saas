@@ -20,8 +20,10 @@ class Alarm(models.Model):
         self.active = False
         self.save()
 
-    def motion_detected(self, filepath=None):
-        signals.motion_detected.send(sender=self.__class__, active=self.active)
+    def trigger_motion_detected(self, filepath=None):
+        signals.motion_detected.send(sender=self.__class__, 
+                                     active=self.active,
+                                     filepath=filepath)
 
     def save(self, *args, **kwargs):
         if not self.name:

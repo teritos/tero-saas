@@ -12,7 +12,8 @@ from django.http import HttpResponse
 BASE_DIR = os.path.dirname(
     os.path.abspath(__file__)
     )
-SETTINGS_YAML = yaml.load(open(os.path.join(BASE_DIR, 'settings.yaml'), 'r'))
+
+CONFIG_YAML = yaml.load(open(os.path.join(BASE_DIR, 'settings.yaml'), 'r'))
 
 settings.configure(
     DEBUG=True,
@@ -24,9 +25,9 @@ settings.configure(
         }
     },
     ROOT_URLCONF=sys.modules[__name__],
-    FTPD_HOST=SETTINGS_YAML['FTPD']['HOST'],
-    FTPD_PORT=SETTINGS_YAML['FTPD']['PORT'],
-    TELEGRAM_BOT_TOKEN=SETTINGS_YAML['TELEGRAM_BOT']['TOKEN'],
+    FTPD_HOST=CONFIG_YAML['FTPD']['HOST'],
+    FTPD_PORT=CONFIG_YAML['FTPD']['PORT'],
+    TELEGRAM_BOT_TOKEN=CONFIG_YAML['TELEGRAM_BOT']['TOKEN'],
     INSTALLED_APPS=[
         'django.contrib.auth',
         'django.contrib.contenttypes',
@@ -35,6 +36,19 @@ settings.configure(
         'plugins',
     ],
 )
+
+PLUGINS_ENABLED = []
+for name in CONFIG_YAML['PLUGINS']:
+    plugin_name = 'plugins.' + name 
+    PLUGINS_ENABLED.append(plugin_name)
+
+settings.INSTALLED_APPS += PLUGINS_ENABLED
+
+
+for plugin in PLUGINS_ENABLED:
+    print('Loading plugin {}...'.format(plugin))
+    __import__(name)
+
 
 def index(request):
     return HttpResponse('<h1>A minimal Django response!</h1>')

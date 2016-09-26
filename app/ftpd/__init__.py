@@ -37,16 +37,16 @@ class MyFTPHandler(FTPHandler):
         user_profile = UserProfile.objects.get(user__username=self.username)
         return user_profile.alarm
 
-    def on_file_received(self, file):
+    def on_file_received(self, filepath):
         alarm = self.get_user_alarm()
-        t = threading.Thread(target=alarm.notify_motion_detected, args=(file,))
+        t = threading.Thread(target=alarm.trigger_motion_detected, args=(filepath,))
         t.start()
         # alarm.notify_motion_detected(file)
 
     def on_incomplete_file_received(self, file):
         alarm = self.get_user_alarm()
         # alarm.notify_motion_detected(file)
-        t = threading.Thread(target=alarm.notify_motion_detected, args=(file,))
+        t = threading.Thread(target=alarm.trigger_motion_detected, args=(filepath,))
         t.start()
 
 
