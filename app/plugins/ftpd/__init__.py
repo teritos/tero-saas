@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import django
 import threading
+import plugins.ftpd.signals
 
 from django.conf import settings
 from django.contrib.auth import authenticate

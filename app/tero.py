@@ -33,22 +33,9 @@ settings.configure(
         'django.contrib.auth',
         'django.contrib.contenttypes',
         'core',
-        'ftpd',
-        'plugins',
+        'plugins.ftpd',
     ],
 )
-
-PLUGINS_ENABLED = []
-for name in CONFIG_YAML['PLUGINS']:
-    plugin_name = 'plugins.' + name 
-    PLUGINS_ENABLED.append(plugin_name)
-
-settings.INSTALLED_APPS += PLUGINS_ENABLED
-
-
-for plugin in PLUGINS_ENABLED:
-    print('Loading {}...'.format(plugin))
-    __import__(name)
 
 
 def index(request):

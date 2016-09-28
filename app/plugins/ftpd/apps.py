@@ -2,10 +2,5 @@ from django.apps import AppConfig
 
 
 class FtpdConfig(AppConfig):
-    name = 'ftpd'
+    name = 'plugins.ftpd'
     verbose_name = 'FTP server'
-
-    def ready(self):
-        import plugins.ftpd.signals
-
-

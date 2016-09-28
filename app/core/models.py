@@ -56,19 +56,19 @@ class UserProfile(models.Model):
 
         alarm, created = Alarm.objects.get_or_create(name=alarm)
 
-        user_profile = cls.objects.create(
+        userprofile = cls.objects.create(
             user=user,
             alarm=alarm,
         )
 
         signals.userprofile_created.send(
-            sender=self.__class__, 
-            username=username,
+            sender=cls, 
+            userprofile=userprofile, 
             alarm=alarm,
             ftpd=ftpd
         )
 
-        return user_profile
+        return userprofile
 
 
     def __str__(self):
