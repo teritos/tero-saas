@@ -27,12 +27,13 @@ settings.configure(
     ROOT_URLCONF=sys.modules[__name__],
     FTPD_HOST=CONFIG_YAML['FTPD']['HOST'],
     FTPD_PORT=CONFIG_YAML['FTPD']['PORT'],
+    FTPD_ROOTDIR = CONFIG_YAML['FTPD']['ROOTDIR'],
     TELEGRAM_BOT_TOKEN=CONFIG_YAML['TELEGRAM_BOT']['TOKEN'],
     INSTALLED_APPS=[
         'django.contrib.auth',
         'django.contrib.contenttypes',
-        'ftpd',
         'core',
+        'ftpd',
         'plugins',
     ],
 )
@@ -46,7 +47,7 @@ settings.INSTALLED_APPS += PLUGINS_ENABLED
 
 
 for plugin in PLUGINS_ENABLED:
-    print('Loading plugin {}...'.format(plugin))
+    print('Loading {}...'.format(plugin))
     __import__(name)
 
 

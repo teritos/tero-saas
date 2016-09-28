@@ -1,1 +1,1 @@
-./manage.py test core -v2
+./tero.py test core -v2

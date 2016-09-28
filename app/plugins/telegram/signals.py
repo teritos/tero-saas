@@ -6,4 +6,4 @@ from django.dispatch import receiver
 def on_motion_detected(sender, **kwargs):
     """Movimiento detectado"""
     print(sender)
-    print(kwargs)
+    print(**kwargs)

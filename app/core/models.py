@@ -54,17 +54,18 @@ class UserProfile(models.Model):
         user.set_password(password)
         user.save()
 
-        if ftpd:
-            from ftpd.models import FTPUser
-            if not FTPUser.objects.filter(user=user).exists():
-                FTPUser.objects.create(user=user)
-
         alarm, created = Alarm.objects.get_or_create(name=alarm)
 
         user_profile = cls.objects.create(
             user=user,
             alarm=alarm,
-            telegram=bot
+        )
+
+        signals.userprofile_created.send(
+            sender=self.__class__, 
+            username=username,
+            alarm=alarm,
+            ftpd=ftpd
         )
 
         return user_profile

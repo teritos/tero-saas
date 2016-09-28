@@ -12,7 +12,7 @@ class FTPUser(models.Model):
 
     @property
     def homedir(self):
-        path = os.path.join(settings.FTPD_ROOT, slugify(self.user))
+        path = os.path.join(settings.FTPD_ROOTDIR, slugify(self.user))
         if not os.path.isdir(path):
             os.makedirs(path)
         return path

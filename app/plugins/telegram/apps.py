@@ -1,5 +1,11 @@
 from django.apps import AppConfig
 
 
-class BotConfig(AppConfig):
-    name = 'bot'
+class TelegramConfig(AppConfig):
+    name = 'plugins.telegram'
+    label = 'telegram'
+    verbose_name = 'Telegram Bot'
+
+    def ready(self):
+        import plugins.telegram.signals
+
