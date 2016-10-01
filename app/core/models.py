@@ -32,7 +32,8 @@ class Alarm(models.Model):
         super(Alarm, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "{} - {}".format(self.name or self.id, self.active)
+        name = self.name if self.name else self.id
+        return "{} - {}".format(name, self.active)
 
 
 class UserProfile(models.Model):
