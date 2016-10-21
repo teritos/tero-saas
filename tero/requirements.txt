@@ -1,0 +1,8 @@
+pyftpdlib
+django
+python-telegram-bot
+djangorestframework
+django-extensions
+gunicorn
+dj-database-url
+whitenoise

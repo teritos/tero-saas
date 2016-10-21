@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source config_enviroment
+
+python manage.py migrate
+python manage.py loaddata auth
+python manage.py loaddata ftpd
+python manage.py loaddata notifications

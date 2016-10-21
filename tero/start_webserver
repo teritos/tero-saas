@@ -1,0 +1,13 @@
+#!/bin/bash
+
+source config_enviroment
+
+SERVER_IP=0.0.0.0
+SERVER_PORT=8001
+ 
+# cd $DJANGODIR
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DJANGODIR:$CWD:$PYTHONPATH
+
+# Start Django run server
+exec django-admin runserver $SERVER_IP:$SERVER_PORT --noreload --nothreading
