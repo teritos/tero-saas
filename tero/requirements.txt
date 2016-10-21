@@ -1,5 +1,0 @@
-pyftpdlib
-django
-python-telegram-bot
-djangorestframework
-pyyaml
