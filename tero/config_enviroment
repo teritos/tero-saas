@@ -3,9 +3,11 @@
 CWD=$(pwd)
 DJANGODIR=$CWD
 DJANGO_SETTINGS_MODULE=settings.dev_settings    # which settings file should Django use
-VENV=~/dev/tools/virtualenvs/scamera/bin/
+PYTHON=`which python`
+VENV=${PYTHON%python}
 
 echo "Starting $NAME as `whoami`"
+echo "Using Python interpreter $PYTHON"
 
 # Activate the virtual environment
 source ${VENV}activate

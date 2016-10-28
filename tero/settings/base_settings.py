@@ -12,7 +12,7 @@ BASE_DIR = os.path.abspath(
 PROJECT_ROOT = BASE_DIR  # os.path.abspath(os.path.join(BASE_DIR, os.path.pardir))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'SBOTy4(p685!4=9ark=l6%$9u_9wtus1hav^^ozn1a%z*a938-sb#7SBOT'
+SECRET_KEY = 'secret'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -34,7 +34,6 @@ INSTALLED_APPS += [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_extensions',
-    'solo',
 ]
 
 MIDDLEWARE_CLASSES = [

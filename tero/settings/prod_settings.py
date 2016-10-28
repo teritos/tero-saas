@@ -1,4 +1,4 @@
-import os.path
+import os
 import dj_database_url
 
 from settings.base_settings import *
@@ -8,6 +8,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+
+TERO_CONFIG_DIR = os.path.expanduser('~/.config/tero')
 
 STATIC_URL = '/static/'
 
@@ -39,9 +41,11 @@ DATABASES = {
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
-FTPD_ROOT = '/tmp/ftpd'
 FTPD_HOST = '0.0.0.0'
 FTPD_PORT = 2121
+FTPD_ROOT = os.path.join(TERO_CONFIG_DIR, 'ftp')
+if not os.path.exists(FTPD_ROOT):
+    os.makedirs(FTPD_ROOT)
 
 
 LOGGING_DEFAULT_LEVEL = 'DEBUG'

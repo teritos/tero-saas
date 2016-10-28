@@ -1,4 +1,4 @@
-import os.path
+import os
 
 from settings.base_settings import *
 
@@ -7,6 +7,8 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+
+TERO_CONFIG_DIR = os.path.expanduser('~/.config/tero')
 
 STATIC_URL = '/static/'
 
@@ -34,11 +36,16 @@ DATABASES = {
     # }
 }
 
-FTPD_ROOT = '/tmp/ftpd'
 FTPD_HOST = '0.0.0.0'
 FTPD_PORT = 2121
+FTPD_ROOT = os.path.join(TERO_CONFIG_DIR, 'ftp')
+if not os.path.exists(FTPD_ROOT):
+    os.makedirs(FTPD_ROOT)
 
 
+TERO_LOG_DIR = os.path.join(TERO_CONFIG_DIR, 'logs')
+if not os.path.exists(TERO_LOG_DIR):
+    os.makedirs(TERO_LOG_DIR)
 LOGGING_DEFAULT_LEVEL = 'DEBUG'
 LOGGING_CONSOLE_HANDLER = 'console'
 LOGGING_FILE_HANDLER = 'file_default'
@@ -71,7 +78,7 @@ LOGGING = {
         LOGGING_FILE_HANDLER: {
             'level': LOGGING_DEFAULT_LEVEL,
             'class': 'logging.FileHandler',
-            'filename': os.path.join(PROJECT_ROOT, 'logs', 'scamera.log'),
+            'filename': os.path.join(TERO_LOG_DIR, 'dj-tero.log'),
             'formatter': 'verbose',
             'filters': [],
         },
