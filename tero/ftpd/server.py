@@ -95,7 +95,7 @@ class NotificationFTPServer():
         self.set_server_settings()
 
     def get_server_impl(self, stype='threaded'):
-        return self.SERVER_TYPE_CLASS.get(stype, FTPServer)
+        return self.SERVER_TYPE_CLASS.get(stype, ThreadedFTPServer)
 
     def set_server_settings(self):
         logger.debug("Setting FTPD parameters...")

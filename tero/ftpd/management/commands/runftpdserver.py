@@ -13,7 +13,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('-t', '--type',
-                            default=['async'],
+                            default=['threaded'],
                             dest='stype',
                             choices=NotificationFTPServer.SERVER_TYPE,
                             type=str,
