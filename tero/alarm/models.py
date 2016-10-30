@@ -3,7 +3,7 @@ from django.db import models
 
 class Alarm(models.Model):
     owner = models.ForeignKey('customer.Customer', on_delete=models.CASCADE)
-    members = models.ManyToManyField('customer.Customer', blank=True, null=True)
+    members = models.ManyToManyField('customer.Customer', related_name='alarm_members')
     active = models.BooleanField(default=False)
     joined = models.DateField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
