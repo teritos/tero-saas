@@ -1,3 +1,5 @@
 from django.contrib import admin
+from notifier.models import Telegram
 
-# Register your models here.
+
+admin.site.register(Telegram)

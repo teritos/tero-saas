@@ -1,3 +1,4 @@
+ipython
 pyftpdlib
 django
 python-telegram-bot
