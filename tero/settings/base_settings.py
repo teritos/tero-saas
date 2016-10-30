@@ -21,8 +21,10 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
-    'ftpd',
-    'notifications'
+    'customemr',
+    'alarm',
+#    'ftpd',
+#    'notifications'
 ]
 
 INSTALLED_APPS += [

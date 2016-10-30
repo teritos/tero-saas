@@ -7,7 +7,7 @@ from pyftpdlib.authorizers import DummyAuthorizer, AuthenticationFailed
 
 from django.contrib.auth import authenticate
 
-from ftpd.models import FTPUser
+from ftpd.models import FTPAccount
 
 
 logger = logging.getLogger("ftpd")
@@ -31,7 +31,7 @@ class FTPDjangoUserAuthorizer(DummyAuthorizer):
             logger.debug("Django user does not exist!")
             raise AuthenticationFailed(msg)
         try:
-            ftp_user = FTPUser.objects.get(user=user)
+            ftp_user = FTPAccount.objects.get(user=user)
             homedir = ftp_user.homedir
             perm = ftp_user.ftpd_perm
             root_homedir = os.path.join(self.root, homedir)
@@ -72,13 +72,8 @@ class NotificationFTPHandler(FTPHandler):
 
     def _send_notifications(self, file):
         logger.info("Firing notification...")
-        ftp_user = FTPUser.objects.get(user__username=self.username)
-        handlers = ftp_user.get_active_notification_handlers()
-        data = open(file, 'rb')
-        kwarg = {'file': data}
-        # TODO: send in a thread or task
-        for hdl in handlers:
-            hdl.new_notification(kwarg)
+        ftp_user = FTPAccount.objects.get(user__username=self.username)
+        logger.info('trigger {}'.format(ftp_user.alarm))
 
 
 class NotificationFTPServer():
@@ -89,7 +84,7 @@ class NotificationFTPServer():
                          'threaded': ThreadedFTPServer,
                          'multiprocess': MultiprocessFTPServer}
 
-    def __init__(self, host, port, rootdir, stype='async'):
+    def __init__(self, host, port, rootdir, stype='threaded'):
         logger.info("Initializing FTP server...")
         self.create_root_dir(rootdir)
         address = (host, port)
@@ -99,13 +94,13 @@ class NotificationFTPServer():
         self.ftp_server = server_impl(address, handler)
         self.set_server_settings()
 
-    def get_server_impl(self, stype='async'):
+    def get_server_impl(self, stype='threaded'):
         return self.SERVER_TYPE_CLASS.get(stype, FTPServer)
 
     def set_server_settings(self):
         logger.debug("Setting FTPD parameters...")
-        self.ftp_server.max_cons = 10
-        self.ftp_server.max_cons_per_ip = 2
+        self.ftp_server.max_cons = 10000
+        self.ftp_server.max_cons_per_ip = 5
 
     def create_root_dir(self, rootdir):
         logger.info("Creating FTP root dir %s...", rootdir)
