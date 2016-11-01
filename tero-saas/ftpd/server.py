@@ -6,8 +6,10 @@ from pyftpdlib.servers import FTPServer, ThreadedFTPServer, MultiprocessFTPServe
 from pyftpdlib.authorizers import DummyAuthorizer, AuthenticationFailed
 
 from django.contrib.auth import authenticate
+from django.core.files.images import ImageFile
 
 from ftpd.models import FTPAccount
+from alarm.forms import AlarmImageForm
 
 
 logger = logging.getLogger("ftpd")
@@ -31,14 +33,14 @@ class FTPDjangoUserAuthorizer(DummyAuthorizer):
             logger.debug("Django user does not exist!")
             raise AuthenticationFailed(msg)
         try:
-            ftp_user = FTPAccount.objects.get(user=user)
+            ftp_user = FTPAccount.objects.get(alarm__owner=user)
             homedir = ftp_user.homedir
             perm = ftp_user.ftpd_perm
             root_homedir = os.path.join(self.root, homedir)
             os.makedirs(root_homedir, exist_ok=True)
             if not self.has_user(username):
                 self.add_user(username, password, root_homedir, perm)
-        except FTPUser.DoesNotExist:
+        except FTPAccount.DoesNotExist:
             logger.error(msg)
             logger.debug("FTP user does not exist!")
             raise AuthenticationFailed(msg)
@@ -62,21 +64,57 @@ class NotificationFTPHandler(FTPHandler):
     def on_logout(self, username):
         logger.debug("%s logged out!", username)
 
-    def on_file_received(self, file):
-        logger.info("File received %s", file)
-        self._send_notifications(file)
+    def on_file_received(self, filepath):
+        logger.info("File received %s", filepath)
+        self._send_notifications(filepath)
 
-    def on_incomplete_file_received(self, file):
-        logger.info("Incomplete file received %s", file)
-        self._send_notifications(file)
+    def on_incomplete_file_received(self, filepath):
+        logger.info("Incomplete file received %s", filepath)
+        self._send_notifications(filepath)
 
-    def _send_notifications(self, file):
+    def _send_notifications(self, filepath):
         logger.info("Firing notification...")
-        ftp_user = FTPAccount.objects.get(user__username=self.username)
+        ftp_user = FTPAccount.objects.get(alarm__owner__username=self.username)
         logger.info('trigger {}'.format(ftp_user.alarm))
 
 
-class NotificationFTPServer():
+class ProxyFTPHandler(FTPHandler):
+
+    def __init__(self, conn, server, ioloop=None):
+        logger.debug("Initializing Proxy FTP handler...")
+        super(ProxyFTPHandler, self).__init__(conn, server, ioloop)
+
+    def on_connect(self):
+        logger.debug("%s:%s connected", self.remote_ip, self.remote_port)
+
+    def on_disconnect(self):
+        logger.debug("%s:%s disconnected", self.remote_ip, self.remote_port)
+
+    def on_login(self, username):
+        logger.debug("%s logged in!", username)
+
+    def on_logout(self, username):
+        logger.debug("%s logged out!", username)
+
+    def on_incomplete_file_received(self, filepath):
+        logger.info("Incomplete file received %s", filepath)
+
+    def on_file_received(self, filepath):
+        ftp_account = FTPAccount.objects.get(alarm__owner__username=self.username)
+        logger.info('Proxy image [{}] for user {}'.format(filepath, ftp_account))
+        
+        with open(filepath, 'rb') as f:
+            form = AlarmImageForm(files={'image': ImageFile(f)})
+
+            if form.is_valid():
+                image = form.save(commit=False)
+                image.alarm = ftp_account.alarm
+                image.save()
+
+        #os.remove(filepath)
+
+
+class AlarmFTPServer():
 
     SERVER_TYPE = ('async', 'threaded', 'multiprocess')
 
@@ -84,11 +122,11 @@ class NotificationFTPServer():
                          'threaded': ThreadedFTPServer,
                          'multiprocess': MultiprocessFTPServer}
 
-    def __init__(self, host, port, rootdir, stype='threaded'):
+    def __init__(self, host, port, rootdir, stype='threaded', handler=NotificationFTPHandler):
         logger.info("Initializing FTP server...")
         self.create_root_dir(rootdir)
         address = (host, port)
-        handler = NotificationFTPHandler
+        handler = handler
         handler.authorizer = FTPDjangoUserAuthorizer(rootdir)
         server_impl = self.get_server_impl(stype)
         self.ftp_server = server_impl(address, handler)

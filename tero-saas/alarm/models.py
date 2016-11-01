@@ -33,3 +33,11 @@ class Alarm(models.Model):
     def __str__(self):
         return "{} {}".format(self.owner, self.active)
 
+
+class AlarmImage(models.Model):
+    alarm = models.ForeignKey(Alarm, related_name='images')
+    image = models.ImageField(upload_to='alarm-images/')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.image.url

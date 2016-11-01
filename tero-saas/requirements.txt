@@ -5,3 +5,4 @@ python-telegram-bot
 django-extensions
 dj-database-url
 whitenoise
+Pillow

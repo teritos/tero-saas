@@ -26,7 +26,7 @@ class FTPAccount(models.Model):
         # f = rename file or directory (RNFR, RNTO commands)",
         # d = delete file or directory (DELE, RMD commands)",
         # M = change mode/permission (SITE CHMOD command)",
-        return 'elamw'.join(perm)
+        return 'elamwd'
 
     def __str__(self):
-        return self.alarm.id
+        return self.homedir

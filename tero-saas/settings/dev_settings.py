@@ -8,7 +8,7 @@ ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
-TERO_CONFIG_DIR = os.path.expanduser('~/.config/tero')
+TERO_ROOT_DIR = os.path.expanduser('~/.tero')
 
 STATIC_URL = '/static/'
 
@@ -38,12 +38,12 @@ DATABASES = {
 
 FTPD_HOST = '0.0.0.0'
 FTPD_PORT = 2121
-FTPD_ROOT = os.path.join(TERO_CONFIG_DIR, 'ftp')
+FTPD_ROOT = os.path.join(TERO_ROOT_DIR, 'ftp')
 if not os.path.exists(FTPD_ROOT):
     os.makedirs(FTPD_ROOT)
 
 
-TERO_LOG_DIR = os.path.join(TERO_CONFIG_DIR, 'logs')
+TERO_LOG_DIR = os.path.join(TERO_ROOT_DIR, 'logs')
 if not os.path.exists(TERO_LOG_DIR):
     os.makedirs(TERO_LOG_DIR)
 LOGGING_DEFAULT_LEVEL = 'DEBUG'
