@@ -14,7 +14,7 @@ class Alarm(models.Model):
     def create(cls, username, password):
         """Create a new alarm."""
         alarm = cls()
-        alarm.user = User.objects.create_user(username, password) 
+        alarm.owner = User.objects.create_user(username, password) 
         alarm.save()
 
         ftp_account = FTPAccount(alarm=alarm)
