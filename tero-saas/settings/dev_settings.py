@@ -7,10 +7,13 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 
 TERO_ROOT_DIR = os.path.expanduser('~/.tero')
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
@@ -19,7 +22,7 @@ STATICFILES_DIRS = (
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 DATABASES = {
     'default': {
@@ -42,6 +45,7 @@ FTPD_ROOT = os.path.join(TERO_ROOT_DIR, 'ftp')
 if not os.path.exists(FTPD_ROOT):
     os.makedirs(FTPD_ROOT)
 
+IMAGES_PROXY_URL = 'http://localhost:8000/images/upload'
 
 TERO_LOG_DIR = os.path.join(TERO_ROOT_DIR, 'logs')
 if not os.path.exists(TERO_LOG_DIR):

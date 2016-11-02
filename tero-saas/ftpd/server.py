@@ -1,15 +1,17 @@
 import os
 import logging
 
+import requests
+from base64 import b64encode
+
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import FTPServer, ThreadedFTPServer, MultiprocessFTPServer
 from pyftpdlib.authorizers import DummyAuthorizer, AuthenticationFailed
 
+from django.conf import settings
 from django.contrib.auth import authenticate
-from django.core.files.images import ImageFile
 
 from ftpd.models import FTPAccount
-from alarm.forms import AlarmImageForm
 
 
 logger = logging.getLogger("ftpd")
@@ -104,12 +106,18 @@ class ProxyFTPHandler(FTPHandler):
         logger.info('Proxy image [{}] for user {}'.format(filepath, ftp_account))
         
         with open(filepath, 'rb') as f:
-            form = AlarmImageForm(files={'image': ImageFile(f)})
+            filename = f.name.split('/')[-1]
+            b64image = b64encode(f.read())
 
-            if form.is_valid():
-                image = form.save(commit=False)
-                image.alarm = ftp_account.alarm
-                image.save()
+            r = requests.post(settings.IMAGES_PROXY_URL, data={
+                'filename': filename,
+                'b64image': b64image,
+                'alarm_id': ftp_account.alarm.id
+            })
+
+            if not r.ok:
+                errors = r.json().get('errors')
+                logger.error(errors)
 
         #os.remove(filepath)
 

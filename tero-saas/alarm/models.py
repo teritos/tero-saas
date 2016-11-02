@@ -1,6 +1,8 @@
+import os 
 from django.contrib.auth.models import User
-from ftpd.models import FTPAccount
 from django.db import models
+
+from ftpd.models import FTPAccount
 
 
 class Alarm(models.Model):
@@ -30,13 +32,20 @@ class Alarm(models.Model):
         self.active = False
         self.save()
 
+    @staticmethod
+    def images_upload_path(instance, filename):
+        path = "{}/{}".format(instance.alarm.pk, filename)
+        return os.path.join(instance.UPLOAD_TO, path)
+
     def __str__(self):
         return "{} {}".format(self.owner, self.active)
 
 
 class AlarmImage(models.Model):
+    UPLOAD_TO = 'alarm-images'
+
     alarm = models.ForeignKey(Alarm, related_name='images')
-    image = models.ImageField(upload_to='alarm-images/')
+    image = models.ImageField(upload_to=Alarm.images_upload_path)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
