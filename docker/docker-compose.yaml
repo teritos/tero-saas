@@ -1,7 +1,7 @@
 version: '2'
 services:
   web:
-    build: ./web-docker
+    build: ./tero-saas-docker
     command: runserver
     entrypoint: /entrypoint.sh
     tty: true
@@ -9,5 +9,5 @@ services:
       - "8000:8000"
     volumes:
       - ./pipcache:/root/.cache/pip
-      - ./web-docker/entrypoint.sh:/entrypoint.sh
-      - ..:/tero
+      - ./tero-saas-docker/entrypoint.sh:/entrypoint.sh
+      - ../tero-saas:/tero

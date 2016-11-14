@@ -1,8 +1,7 @@
 ipython
 pyftpdlib
 django
-python-telegram-bot
 django-extensions
 dj-database-url
-whitenoise
 Pillow
+djangorestframework

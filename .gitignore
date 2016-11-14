@@ -92,3 +92,4 @@ site-packages
 db.sqlite3
 
 settings.yaml
+pipcache
