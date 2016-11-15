@@ -5,3 +5,5 @@ django-extensions
 dj-database-url
 Pillow
 djangorestframework
+requests
+ipdb
