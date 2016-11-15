@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'notifier',
     'alarm',
     'ftpd',
+    'apps.telegram',
 ]
 
 INSTALLED_APPS += [

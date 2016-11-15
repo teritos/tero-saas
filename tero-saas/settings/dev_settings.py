@@ -29,14 +29,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(PROJECT_ROOT, 'db.sqlite3'),
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'scamera',
-    #     'USER': 'scamera',
-    #     'PASSWORD': 'pass',
-    #     'HOST': '127.0.0.1',
-    #     'PORT': '5432',
-    # }
 }
 
 FTPD_HOST = '0.0.0.0'
@@ -54,6 +46,10 @@ LOGGING_DEFAULT_LEVEL = 'DEBUG'
 LOGGING_CONSOLE_HANDLER = 'console'
 LOGGING_FILE_HANDLER = 'file_default'
 LOGGING_DEFAULT_HANDLERS = [LOGGING_CONSOLE_HANDLER, LOGGING_FILE_HANDLER]
+
+# Telegram app
+TELEGRAM_BOT_TOKEN = '265716638:AAF13GJ7tMGpI4VUTBNzfeG0XiKDXiCLW1Y'
+TELEGRAM_API_URL = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/'
 
 # Logging config
 LOGGING = {
