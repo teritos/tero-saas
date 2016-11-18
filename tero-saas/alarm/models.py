@@ -2,7 +2,7 @@ import os
 from django.contrib.auth.models import User
 from django.db import models
 
-from ftpd.models import FTPAccount
+from apps.ftpd.models import FTPAccount
 
 
 class Alarm(models.Model):

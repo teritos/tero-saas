@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 
-from alarm.views import save_image
+from apps.alarm.views import save_image
 
 
 urlpatterns = [
