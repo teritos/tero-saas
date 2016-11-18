@@ -21,7 +21,6 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
-    'notifier',
     'alarm',
     'ftpd',
     'apps.telegram',

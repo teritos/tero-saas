@@ -1,9 +1,13 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 from django.conf import settings
 from django.http import JsonResponse
-
+from django.http import HttpResponseForbidden
 from django.views import View
+
 import requests
+import json
 
 
 TOKEN = settings.TELEGRAM_BOT_TOKEN
@@ -25,7 +29,7 @@ class ResetWebhookView(View):
     def get(self, request):
         url = ''.join((BASE_URL, 'setWebhook?url=""'))
         response = requests.get(url)
-        return JsonResponse(data=response.get_json())
+        return JsonResponse(data=response.json())
 
 
 class SetWebhookView(View):
@@ -33,9 +37,9 @@ class SetWebhookView(View):
 
     def get(self, request):
         webhook_url = request.GET.get('url')
-        url = ''.join((BASE_URL, 'setWebhook?url=', webhook_url))
+        url = ''.join((BASE_URL, 'setWebhook?url={}'.format(webhook_url)))
         response = requests.get(url)
-        return JsonResponse(data=response.get_json())
+        return JsonResponse(data=response.json())
 
 
 class WebhookInfoView(View):
@@ -44,25 +48,39 @@ class WebhookInfoView(View):
     def get(self, request):
         url = ''.join((BASE_URL, 'getWebhookInfo'))
         response = requests.get(url)
-        return JsonResponse(data=response.get_json())
+        return JsonResponse(data=response.json())
 
 
 class WebhookView(View):
     """Webhook View that recieves telegram messages."""
 
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super(WebhookView, self).dispatch(*args, **kwargs)
+
     def post(self, request):
-        import ipdb; ipdb.set_trace()
-        data = request.get_json()
+
+        if request.content_type != 'application/json':
+            return HttpResponseForbidden()
+
+        data = json.loads(request.body.decode('utf-8'))
         message = data['message']
-        from_id = message['from']['id']
-        text = message['text']
         message_id = message['message_id']
-        chat_id = message['chat']['id']
-        msg = 'frulaaaaaaaaaa'
-        resp = urllib2.urlopen(BASE_URL + 'sendMessage', urllib.urlencode({
-            'chat_id': str(chat_id),
-            'text': msg.encode('utf-8'),
+        message_text = message['text']
+        from_ = message['from']
+        from_id = from_['id']
+        chat = message['chat']
+        chat_id = chat['id']
+        chat_type = chat['type']
+        chat_first_name = chat['first_name']
+
+        payload = {
+            'chat_id': chat_id,
+            'text': message_text, 
             'disable_web_page_preview': 'true',
-            'reply_to_message_id': str(message_id),
-        })).read()
-        return json.dumps(data)
+            'reply_to_message_id': message_id,
+        }
+        url = ''.join((BASE_URL, 'sendMessage'))
+        response = requests.get(url, params=payload)
+
+        return JsonResponse(data=response.json())
