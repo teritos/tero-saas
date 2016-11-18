@@ -1,6 +1,6 @@
 from django import forms
 
-from apps.alarm.models import AlarmImage
+from alarm.models import AlarmImage
 
 
 class AlarmImageForm(forms.ModelForm):

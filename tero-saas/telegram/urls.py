@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from apps.telegram.views import (
+from telegram.views import (
     GetMeView,
     ResetWebhookView,
     SetWebhookView,

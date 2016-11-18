@@ -7,7 +7,7 @@ from django.core.files.images import ImageFile
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 
-from apps.alarm.forms import AlarmImageForm
+from alarm.forms import AlarmImageForm
 
 
 @csrf_exempt
