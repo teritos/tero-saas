@@ -11,7 +11,7 @@ from pyftpdlib.authorizers import DummyAuthorizer, AuthenticationFailed
 from django.conf import settings
 from django.contrib.auth import authenticate
 
-from apps.ftpd.models import FTPAccount
+from ftpd.models import FTPAccount
 
 
 logger = logging.getLogger("ftpd")
