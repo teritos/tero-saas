@@ -1,0 +1,4 @@
+ipython
+numpy
+scikit-image
+boto3
