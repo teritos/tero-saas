@@ -1,9 +1,6 @@
 import boto3
-import numpy as np 
 from .aws import rekognition 
-from scipy.misc import imread
-from skimage import img_as_float
-from skimage.measure import compare_mse as mse
+from skimage.io import imread
 from skimage.measure import compare_ssim as ssim
 
 
@@ -58,13 +55,28 @@ def detect_labels(image, max_labels=5, min_confidence=80):
     return labels 
 
 
-def to_grayscale(image_path):
-    return imread(image_path).astype(float)
+def compare(fname_a, fname_b):
+    """Returns a float between 0-1 on how different given images are.
+    1 means images are the same, 0 means images are totally different.
 
+        Arguments:
+            fname_a (FilePath)      Image Filepath 1
+            fname_b (FilePath)      Image Filepath 2
 
-def compare(image_a, image_b):
-    """Compare two images."""
+        Usage:
 
+            >>> from tero.images import compare
 
-def detect_person(image_path):
-    """Return bool if a person is detected on given image."""
+            >>> compare('a.jpg', 'b.jpg')
+            0.90009695173409698
+
+    """
+
+    # TODO
+    # Handle / compare S3Images
+
+    img_a = imread(fname_a, as_grey=True)
+    img_b = imread(fname_b, as_grey=True)
+    ssi = ssim(img_a, img_b)
+
+    return ssi
