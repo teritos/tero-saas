@@ -29,11 +29,9 @@ class FTPDjangoUserAuthorizer(DummyAuthorizer):
     def validate_authentication(self, username, password, handler):
         logger.info("Authenticating user %s...", username)
         user = authenticate(username=username, password=password)
-        msg = "Authentication failed."
         if not user:
-            logger.error(msg)
-            logger.debug("Django user does not exist!")
-            raise AuthenticationFailed(msg)
+            logger.info('Authentication failed for user %s with password %s', username, password)
+            raise AuthenticationFailed()
         try:
             ftp_user = FTPAccount.objects.get(alarm__owner=user)
             homedir = ftp_user.homedir
@@ -43,9 +41,8 @@ class FTPDjangoUserAuthorizer(DummyAuthorizer):
             if not self.has_user(username):
                 self.add_user(username, password, root_homedir, perm)
         except FTPAccount.DoesNotExist:
-            logger.error(msg)
-            logger.debug("FTP user does not exist!")
-            raise AuthenticationFailed(msg)
+            logger.info("User %s with password %s doesnt have an FTPAccount related object.", username, password)
+            raise AuthenticationFailed()
 
 
 class NotificationFTPHandler(FTPHandler):
