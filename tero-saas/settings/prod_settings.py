@@ -24,17 +24,13 @@ STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_ROOT, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('PGSQL_NAME'),
+        'USER': os.getenv('PGSQL_USER'),
+        'PASSWORD': os.getenv('PGSQL_SECRET'),
+        'HOST': os.getenv('PGSQL_HOST'),
+        'PORT': os.getenv('PGSQL_PORT', '5432',
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'scamera',
-    #     'USER': 'scamera',
-    #     'PASSWORD': 'pass',
-    #     'HOST': '127.0.0.1',
-    #     'PORT': '5432',
-    # }
 }
 
 # Update database configuration with $DATABASE_URL.
@@ -71,8 +67,8 @@ LOGGING = {
         },
     },
     'handlers': {
-        LOGGING_CONSOLE_HANDLER: {
-            'level': LOGGING_DEFAULT_LEVEL,
+        'console': {
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
             'filters': ['require_debug_true'],
