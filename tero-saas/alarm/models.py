@@ -24,6 +24,10 @@ class Alarm(models.Model):
 
         return alarm
 
+    @classmethod
+    def is_active_for(cls, username):
+        return cls.objects.values('active').get(owner__username=username).get('active')
+
     def activate(self):
         self.active = True
         self.save()
