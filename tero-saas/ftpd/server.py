@@ -12,9 +12,13 @@ from django.conf import settings
 from django.contrib.auth import authenticate
 
 from ftpd.models import FTPAccount
+from ftpd.images import ImageHandler
+
+from alarm.models import Alarm
 
 
 logger = logging.getLogger("ftpd")
+ih = ImageHandler()
 
 
 class FTPDjangoUserAuthorizer(DummyAuthorizer):
@@ -32,6 +36,11 @@ class FTPDjangoUserAuthorizer(DummyAuthorizer):
         if not user:
             logger.info('Authentication failed for user %s with password %s', username, password)
             raise AuthenticationFailed()
+
+        if not Alarm.is_active_for(username):
+            logger.info('User %s alarm is deactivated, ignoring session', username)
+            raise AuthenticationFailed()
+
         try:
             ftp_user = FTPAccount.objects.get(alarm__owner=user)
             homedir = ftp_user.homedir
@@ -72,9 +81,8 @@ class NotificationFTPHandler(FTPHandler):
         self._send_notifications(filepath)
 
     def _send_notifications(self, filepath):
-        logger.info("Firing notification...")
-        ftp_user = FTPAccount.objects.get(alarm__owner__username=self.username)
-        logger.info('trigger {}'.format(ftp_user.alarm))
+        logger.info('Asking image handler to handle the situation')
+        ih.handle(filepath)
 
 
 class ProxyFTPHandler(FTPHandler):
