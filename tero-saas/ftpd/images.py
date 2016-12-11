@@ -3,10 +3,12 @@ from pathlib import (
     PurePath
 )
 from itertools import tee
+from tero.deep import run_detector
 from tero.images import compare
 import logging
 
 
+SIMILAR_IMGS_BARRIER = 0.80
 logger = logging.getLogger("ftpd")
 
 
@@ -36,7 +38,7 @@ class ImageHandler(object):
     def set_similar_score(self, files_to_check):
         scores = []
         if len(files_to_check) == 1:
-            scores.append(files_to_check[0], 0)
+            scores.append((files_to_check[0], files_to_check[0], 0))
             return scores
 
         for x, y in self._pairwise(files_to_check):
@@ -44,9 +46,17 @@ class ImageHandler(object):
 
         return scores 
 
+    def analyze_image(self, filepath):
+        run_detector(filepath)
+
     def handle(self, filepath):
         files_to_check = self.get_files_to_check(filepath)
         scores = self.set_similar_score(files_to_check)
         for score in scores:
             img_a, img_b, diff = score
-            print('%s\t%s\t%s' % (img_a.name, img_b.name, diff))
+            print(diff)
+            if diff >= SIMILAR_IMGS_BARRIER:
+                continue
+            logger.info('Whops! a suspected image! %s', img_b.name)
+            print(self.analyze_image(img_b))
+
