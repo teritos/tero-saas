@@ -82,7 +82,7 @@ class NotificationFTPHandler(FTPHandler):
 
     def _send_notifications(self, filepath):
         logger.info('Asking image handler to handle the situation')
-        ih.handle(filepath)
+        ih.handle(filepath, username=self.username)
 
 
 class ProxyFTPHandler(FTPHandler):

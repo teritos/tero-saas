@@ -3,9 +3,15 @@ from pathlib import (
     PurePath
 )
 from itertools import tee
+from multiprocessing import Process
 from tero.deep import run_detector
 from tero.images import compare
+from alarm.models import (
+    AlarmImage,
+    Alarm
+)
 import logging
+import os
 
 
 SIMILAR_IMGS_BARRIER = 0.80
@@ -46,17 +52,31 @@ class ImageHandler(object):
 
         return scores 
 
-    def analyze_image(self, filepath):
-        run_detector(filepath)
+    def analyze_image(self, imgpath, username):
+        pid = os.getpid()
+        logger.info('Pid %s >>> Going to run detector on %s', pid, imgpath.name)
+        predicted = run_detector(imgpath.as_posix())
+        logger.info('Pid %s >>> Detector finished on %s, it tooks %s', pid, imgpath.name, predicted['ptime'])
+        if predicted['person_detected']:
+            logger.info(
+                'Person detected on %s, prediction saved on %s, detected %s',
+                imgpath.name, str(predicted['saved']), predicted['labels']
+            )
+            alarm = Alarm.get_by_username(username)
+            alarm_image = AlarmImage(alarm=alarm, image=str(predicted['saved']))
+            alarm_image.save()
+            logger.info("Pid %s >>> Saved image on DB. Alarm id %s", pid, alarm_image.id)
 
-    def handle(self, filepath):
+    def handle(self, filepath, username):
         files_to_check = self.get_files_to_check(filepath)
         scores = self.set_similar_score(files_to_check)
         for score in scores:
             img_a, img_b, diff = score
-            print(diff)
             if diff >= SIMILAR_IMGS_BARRIER:
                 continue
-            logger.info('Whops! a suspected image! %s', img_b.name)
-            print(self.analyze_image(img_b))
+            logger.info('%s differs %s with %s', img_b.name, diff, img_a.name)
+            logger.info('Checking labels on %s', img_b.name)
+            p = Process(target=self.analyze_image, args=(img_b, username))
+            p.start()
+            p.join()
 

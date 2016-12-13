@@ -1,7 +1,22 @@
+from pathlib import PurePath
 import configparser
 import subprocess
 import shlex
 import os
+
+
+def parse_predicted(line):
+    data = dict(
+        fname=line[0].strip(b'>>> Processed: '),
+        ptime=line[1].strip(b'>>> Predicted in: '),
+        saved=line[-1].strip(b'>>> Saved to: '),
+        labels=line[2:-1],
+        person_detected=False,
+    )
+    for label in data['labels']:
+        if b'person' in label:
+            data['person_detected'] = True
+    return data
 
 
 def run_detector(image_path, cfg=None):
@@ -20,6 +35,7 @@ def run_detector(image_path, cfg=None):
     cmd = shlex.split(cmd)
 
     completed_process = subprocess.run(cmd, stdout=subprocess.PIPE)
-    data = completed_process.stdout.split(b'\n')
+    data = parse_predicted(completed_process.stdout.split(b'\n'))
+    data.update({'saved': PurePath(deepnet['Chdir'], data['saved'].decode('utf-8'))})
 
     return data 
