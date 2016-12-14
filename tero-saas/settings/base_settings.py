@@ -35,6 +35,7 @@ INSTALLED_APPS += [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_extensions',
+    'channels',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -126,3 +127,14 @@ FTPD_HOST = ''
 FTPD_PORT = 0
 
 LOGGING_DEFAULT_LEVEL = 'ERROR'
+
+# Django channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("172.17.0.2", 6379)],
+        },
+        "ROUTING": "settings.routing.channel_routing",
+    },
+}

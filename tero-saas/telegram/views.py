@@ -71,6 +71,7 @@ class WebhookView(View):
         from_id = from_['id']
         chat = message['chat']
         chat_id = chat['id']
+        print(chat_id)
         chat_type = chat['type']
         chat_first_name = chat['first_name']
 

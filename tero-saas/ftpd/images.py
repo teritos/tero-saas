@@ -6,6 +6,7 @@ from itertools import tee
 from multiprocessing import Process
 from tero.deep import run_detector
 from tero.images import compare
+from settings.asgi import channel_layer
 from alarm.models import (
     AlarmImage,
     Alarm
@@ -65,6 +66,11 @@ class ImageHandler(object):
             alarm = Alarm.get_by_username(username)
             alarm_image = AlarmImage(alarm=alarm, image=str(predicted['saved']))
             alarm_image.save()
+            channel_layer.send('messenger.telegram', {
+                'text': 'Persona detectada.',
+                'username': username,
+                'filepath': str(predicted['saved']),
+            })
             logger.info("Pid %s >>> Saved image on DB. Alarm id %s", pid, alarm_image.id)
 
     def handle(self, filepath, username):
