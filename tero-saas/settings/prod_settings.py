@@ -8,12 +8,15 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 
 TERO_ROOT_DIR = os.path.expanduser('~/.tero')
 if not os.path.isdir(TERO_ROOT_DIR):
     os.makedirs(TERO_ROOT_DIR)
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
@@ -45,11 +48,15 @@ FTPD_ROOT = os.path.join(TERO_ROOT_DIR, 'ftp')
 if not os.path.exists(FTPD_ROOT):
     os.makedirs(FTPD_ROOT)
 
+IMAGES_PROXY_URL = 'http://localhost:8000/images/upload'
 
+TERO_LOG_DIR = os.path.join(TERO_ROOT_DIR, 'logs')
+if not os.path.exists(TERO_LOG_DIR):
+    os.makedirs(TERO_LOG_DIR)
 LOGGING_DEFAULT_LEVEL = 'DEBUG'
 LOGGING_CONSOLE_HANDLER = 'console'
 LOGGING_FILE_HANDLER = 'file_default'
-LOGGING_DEFAULT_HANDLERS = [LOGGING_CONSOLE_HANDLER]
+LOGGING_DEFAULT_HANDLERS = [LOGGING_CONSOLE_HANDLER, LOGGING_FILE_HANDLER]
 
 # Logging config
 LOGGING = {
