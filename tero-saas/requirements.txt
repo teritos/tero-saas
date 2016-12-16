@@ -12,3 +12,4 @@ asgi_redis
 requests
 daphne
 circus
+psycopg2
