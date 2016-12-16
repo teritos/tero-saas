@@ -6,7 +6,6 @@ from telegram.models import TelegramUser
 BASE_URL = settings.TELEGRAM_API_URL
 
 
-
 def send_message(username, message, filepath):
 
     chat_id = TelegramUser.objects.values('telegram_id').get(user__username=username).get('telegram_id') 
@@ -18,7 +17,6 @@ def send_message(username, message, filepath):
     url = ''.join((BASE_URL, 'sendMessage'))
     response = requests.get(url, params=payload)
 
-    # TODO: Send image
-    # url = ''.join((BASE_URL, 'sendPhoto'))
-    # payload = {'chat_id': chat_id, 'photo': open(filepath, 'rb')}
-    # response = requests.post(url, files=payload)
+    url = ''.join((BASE_URL, 'sendPhoto'))
+    files = {'photo': open(filepath, 'rb')}
+    response = requests.post(url, params=payload, files=files)
