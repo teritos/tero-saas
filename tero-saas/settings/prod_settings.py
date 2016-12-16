@@ -9,7 +9,9 @@ ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
-TERO_CONFIG_DIR = os.path.expanduser('~/.config/tero')
+TERO_ROOT_DIR = os.path.expanduser('~/.tero')
+if not os.path.isdir(TERO_ROOT_DIR):
+    os.makedirs(TERO_ROOT_DIR)
 
 STATIC_URL = '/static/'
 
@@ -39,7 +41,7 @@ DATABASES['default'].update(db_from_env)
 
 FTPD_HOST = '0.0.0.0'
 FTPD_PORT = 2121
-FTPD_ROOT = os.path.join(TERO_CONFIG_DIR, 'ftp')
+FTPD_ROOT = os.path.join(TERO_ROOT_DIR, 'ftp')
 if not os.path.exists(FTPD_ROOT):
     os.makedirs(FTPD_ROOT)
 
@@ -108,3 +110,7 @@ CHANNEL_LAYERS = {
         "ROUTING": "settings.routing.channel_routing",
     },
 }
+
+# Telegram app
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN') 
+TELEGRAM_API_URL = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/'
