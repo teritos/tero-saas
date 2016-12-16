@@ -97,3 +97,14 @@ LOGGING = {
         },
     }
 }
+
+# Django channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(os.getenv('REDIS_HOST'), 6379)],
+        },
+        "ROUTING": "settings.routing.channel_routing",
+    },
+}
