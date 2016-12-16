@@ -10,3 +10,5 @@ ipdb
 channels
 asgi_redis
 requests
+daphne
+circus

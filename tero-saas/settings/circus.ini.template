@@ -1,0 +1,30 @@
+[circus]
+statsd = 1
+httpd = 0
+
+[watcher:daphne]
+cmd = daphne
+args = -b 0.0.0.0 -p 8082 --http-timeout 20 settings.asgi:channel_layer
+numprocesses = 1
+use_sockets = False 
+virtualenv = /home/ubuntu/.virtualenvs/tero-saas/
+copy_env = True
+working_dir = /home/ubuntu/src/tero-saas
+
+[watcher:worker]
+cmd = python manage.py runworker
+numprocesses = 2
+copy_env = True
+virtualenv = /home/ubuntu/.virtualenvs/tero-saas/
+
+[env:daphne]
+PYTHONPATH = /home/ubuntu/src/tero-saas
+DJANGO_SETTINGS_MODULE = settings.prod_settings
+DJANGO_DEBUG = 'false' 
+DEEPINI = /home/ubuntu/config/deep.ini
+
+[env:worker]
+PYTHONPATH = /home/ubuntu/src/tero-saas
+DJANGO_SETTINGS_MODULE = settings.prod_settings
+DJANGO_DEBUG = 'false' 
+DEEPINI = /home/ubuntu/config/deep.ini
