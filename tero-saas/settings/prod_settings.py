@@ -29,7 +29,7 @@ DATABASES = {
         'USER': os.getenv('PGSQL_USER'),
         'PASSWORD': os.getenv('PGSQL_SECRET'),
         'HOST': os.getenv('PGSQL_HOST'),
-        'PORT': os.getenv('PGSQL_PORT', '5432',
+        'PORT': os.getenv('PGSQL_PORT','5432'),
     }
 }
 
