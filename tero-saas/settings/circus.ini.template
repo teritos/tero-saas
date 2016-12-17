@@ -4,27 +4,65 @@ httpd = 0
 
 [watcher:daphne]
 cmd = daphne
-args = -b 0.0.0.0 -p 8082 --http-timeout 20 settings.asgi:channel_layer
+args = -b 127.0.0.1 -p 8080 --http-timeout 20 settings.asgi:channel_layer
 numprocesses = 1
 use_sockets = False 
-virtualenv = /home/ubuntu/.virtualenvs/tero-saas/
+virtualenv =
 copy_env = True
-working_dir = /home/ubuntu/src/tero-saas
+working_dir =
 
 [watcher:worker]
 cmd = python manage.py runworker
-numprocesses = 2
+numprocesses = 1
 copy_env = True
-virtualenv = /home/ubuntu/.virtualenvs/tero-saas/
+virtualenv =
+
+[watcher:ftpd]
+cmd = python manage.py runftpdserver 
+numprocesses = 1
+copy_env = True
+virtualenv =
 
 [env:daphne]
-PYTHONPATH = /home/ubuntu/src/tero-saas
+PYTHONPATH =
 DJANGO_SETTINGS_MODULE = settings.prod_settings
 DJANGO_DEBUG = 'false' 
-DEEPINI = /home/ubuntu/config/deep.ini
+DEEPINI =
+PGSQL_NAME =
+PGSQL_USER =
+PGSQL_SECRET =
+PGSQL_HOST =
+PGSQL_PORT =
+REDIS_HOST =
+TELEGRAM_BOT_TOKEN =
+DJANGO_STATIC_ROOT =
+DJANGO_MEDIA_ROOT =
 
 [env:worker]
-PYTHONPATH = /home/ubuntu/src/tero-saas
-DJANGO_SETTINGS_MODULE = settings.prod_settings
+PYTHONPATH =
+DJANGO_SETTINGS_MODULE =
 DJANGO_DEBUG = 'false' 
-DEEPINI = /home/ubuntu/config/deep.ini
+DEEPINI =
+PGSQL_NAME =
+PGSQL_USER =
+PGSQL_SECRET =
+PGSQL_HOST =
+PGSQL_PORT =
+REDIS_HOST =
+TELEGRAM_BOT_TOKEN =
+DJANGO_STATIC_ROOT =
+DJANGO_MEDIA_ROOT =
+
+[env:ftpd]
+PYTHONPATH =
+DJANGO_SETTINGS_MODULE =
+DJANGO_DEBUG = 'false' 
+DEEPINI =
+PGSQL_NAME =
+PGSQL_USER =
+PGSQL_SECRET =
+PGSQL_HOST =
+PGSQL_PORT =
+REDIS_HOST =
+TELEGRAM_BOT_TOKEN =
+FTPD_MASQUERADE_ADDRESS =

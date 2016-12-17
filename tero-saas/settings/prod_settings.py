@@ -1,27 +1,26 @@
-import os
-import dj_database_url
+"""Production settings."""
 
-from settings.base_settings import *
+import os
+from settings.base_settings import *  # pylint: skip-file
 
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
-MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
+STATIC_ROOT = os.getenv('DJANGO_STATIC_ROOT')
+MEDIA_ROOT = os.getenv('DJANGO_MEDIA_ROOT')
 
 TERO_ROOT_DIR = os.path.expanduser('~/.tero')
 if not os.path.isdir(TERO_ROOT_DIR):
     os.makedirs(TERO_ROOT_DIR)
 
 STATIC_URL = '/static/'
-
 MEDIA_URL = '/media/'
 
 # Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(PROJECT_ROOT, 'static'),
+# )
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
@@ -34,13 +33,9 @@ DATABASES = {
         'USER': os.getenv('PGSQL_USER'),
         'PASSWORD': os.getenv('PGSQL_SECRET'),
         'HOST': os.getenv('PGSQL_HOST'),
-        'PORT': os.getenv('PGSQL_PORT','5432'),
+        'PORT': os.getenv('PGSQL_PORT', '5432'),
     }
 }
-
-# Update database configuration with $DATABASE_URL.
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
 
 FTPD_HOST = '0.0.0.0'
 FTPD_PORT = 2121
@@ -126,5 +121,5 @@ CHANNEL_LAYERS = {
 }
 
 # Telegram app
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN') 
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_API_URL = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/'
