@@ -2,6 +2,7 @@ from telegram.api import send_message
 
 
 def telegram_consumer(message):
+    """Consume messages queued into messengers.telegram."""
     text = message['text']
     username = message['username']
     filepath = message['filepath']

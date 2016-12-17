@@ -8,15 +8,16 @@ BASE_URL = settings.TELEGRAM_API_URL
 
 def send_message(username, message, filepath):
 
-    chat_id = TelegramUser.objects.values('telegram_id').get(user__username=username).get('telegram_id') 
+    chat_id = TelegramUser.objects.values('telegram_id').get(
+        user__username=username).get('telegram_id')
     payload = {
         'chat_id': chat_id,
-        'text': message, 
+        'text': message,
         'disable_web_page_preview': 'true',
     }
     url = ''.join((BASE_URL, 'sendMessage'))
-    response = requests.get(url, params=payload)
+    requests.get(url, params=payload)
 
     url = ''.join((BASE_URL, 'sendPhoto'))
     files = {'photo': open(filepath, 'rb')}
-    response = requests.post(url, params=payload, files=files)
+    requests.post(url, params=payload, files=files)
