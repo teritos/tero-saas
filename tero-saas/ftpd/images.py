@@ -43,26 +43,35 @@ class ImageHandler(object):
         return to_check
 
     def set_similar_score(self, files_to_check):
+        """Compare how different are given images."""
         scores = []
         if len(files_to_check) == 1:
             scores.append((files_to_check[0], files_to_check[0], 0))
             return scores
 
-        for x, y in self._pairwise(files_to_check):
-            scores.append((x, y, compare(x, y)))
+        for imga, imgb in self._pairwise(files_to_check):
+            scores.append((imga, imgb, compare(imga, imgb)))
 
-        return scores 
+        return scores
 
     def analyze_image(self, imgpath, username):
+        """Detect people on image."""
         pid = os.getpid()
         logger.info('Pid %s >>> Going to run detector on %s', pid, imgpath.name)
         predicted = run_detector(imgpath.as_posix())
-        logger.info('Pid %s >>> Detector finished on %s, it tooks %s', pid, imgpath.name, predicted['ptime'])
+        logger.info(
+            'Pid %s >>> Detector finished on %s, it tooks %s',
+            pid,
+            imgpath.name,
+            predicted['ptime']
+            )
         if predicted['person_detected']:
             logger.info(
                 'Person detected on %s, prediction saved on %s, detected %s',
-                imgpath.name, str(predicted['saved']), predicted['labels']
-            )
+                imgpath.name,
+                str(predicted['saved']),
+                predicted['labels']
+                )
             alarm = Alarm.get_by_username(username)
             alarm_image = AlarmImage(alarm=alarm, image=str(predicted['saved']))
             alarm_image.save()
@@ -74,6 +83,7 @@ class ImageHandler(object):
             logger.info("Pid %s >>> Saved image on DB. Alarm id %s", pid, alarm_image.id)
 
     def handle(self, filepath, username):
+        """Handle received file event."""
         files_to_check = self.get_files_to_check(filepath)
         scores = self.set_similar_score(files_to_check)
         for score in scores:
@@ -82,7 +92,7 @@ class ImageHandler(object):
                 continue
             logger.info('%s differs %s with %s', img_b.name, diff, img_a.name)
             logger.info('Checking labels on %s', img_b.name)
-            p = Process(target=self.analyze_image, args=(img_b, username))
-            p.start()
-            p.join()
+            process = Process(target=self.analyze_image, args=(img_b, username))
+            process.start()
+            process.join()
 
