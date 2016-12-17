@@ -87,12 +87,12 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': LOGGING_CONSOLE_HANDLER,
+            'handlers': [LOGGING_CONSOLE_HANDLER],
             'level': 'INFO',
             'propagate': False,
         },
         'django.request': {
-            'handlers': LOGGING_CONSOLE_HANDLER,
+            'handlers': [LOGGING_CONSOLE_HANDLER],
             'level': 'INFO',
             'propagate': False,
         },
