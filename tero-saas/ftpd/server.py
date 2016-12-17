@@ -57,6 +57,7 @@ class FTPDjangoUserAuthorizer(DummyAuthorizer):
 class NotificationFTPHandler(FTPHandler):
 
     passive_ports = list(range(30000, 35000))
+    masquerade_address = os.getenv('FTPD_MASQUERADE_ADDRESS') 
 
     def __init__(self, conn, server, ioloop=None):
         logger.debug("Initializing FTP Notification handler...")
