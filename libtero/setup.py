@@ -10,7 +10,11 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    # TODO: put package requirements here
+    'ipython',
+    'numpy',
+    'scikit-image',
+    'boto3',
+    'scipy',
 ]
 
 test_requirements = [
@@ -18,7 +22,7 @@ test_requirements = [
 ]
 
 setup(
-    name='tero',
+    name='libtero',
     version='0.1.0',
     description="Tero libs",
     long_description=readme + '\n\n' + history,
@@ -26,10 +30,10 @@ setup(
     author_email=' ',
     url='https://github.com/edvm/tero',
     packages=[
-        'tero',
+        'libtero',
     ],
-    package_dir={'tero':
-                 'tero'},
+    package_dir={'libtero':
+                 'libtero'},
     include_package_data=True,
     install_requires=requirements,
     license="GNU General Public License v3",
@@ -48,6 +52,4 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
     ],
-    test_suite='tests',
-    tests_require=test_requirements
 )
