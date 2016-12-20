@@ -13,3 +13,5 @@ requests
 daphne
 circus
 psycopg2
+django-bootstrap-form==3.2.1
+
