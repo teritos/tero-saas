@@ -7,6 +7,7 @@ BASE_URL = settings.TELEGRAM_API_URL
 
 
 def send_message(username, message, filepath):
+    """Send a message to a telegram user."""
 
     chat_id = TelegramUser.objects.values('telegram_id').get(
         user__username=username).get('telegram_id')

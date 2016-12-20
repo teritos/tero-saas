@@ -3,7 +3,7 @@ from pathlib import (
     PurePath
 )
 from itertools import tee
-from multiprocessing import Process
+from threading import Thread
 from tero.deep import run_detector
 from tero.images import compare
 from settings.asgi import channel_layer
@@ -84,15 +84,5 @@ class ImageHandler(object):
 
     def handle(self, filepath, username):
         """Handle received file event."""
-        files_to_check = self.get_files_to_check(filepath)
-        scores = self.set_similar_score(files_to_check)
-        for score in scores:
-            img_a, img_b, diff = score
-            if diff >= SIMILAR_IMGS_BARRIER:
-                continue
-            logger.info('%s differs %s with %s', img_b.name, diff, img_a.name)
-            logger.info('Checking labels on %s', img_b.name)
-            process = Process(target=self.analyze_image, args=(img_b, username))
-            process.start()
-            process.join()
-
+        thread = Thread(target=self.analyze_image, args=(PurePath(filepath), username))
+        thread.start()
