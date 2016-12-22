@@ -1,22 +1,26 @@
-import os
-import dj_database_url
+"""Production settings."""
 
-from settings.base_settings import *
+import os
+from settings.base_settings import *  # pylint: skip-file
 
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_ROOT = os.getenv('DJANGO_STATIC_ROOT')
+MEDIA_ROOT = os.getenv('DJANGO_MEDIA_ROOT')
 
-TERO_CONFIG_DIR = os.path.expanduser('~/.config/tero')
+TERO_ROOT_DIR = os.path.expanduser('~/.tero')
+if not os.path.isdir(TERO_ROOT_DIR):
+    os.makedirs(TERO_ROOT_DIR)
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
 # Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(PROJECT_ROOT, 'static'),
+# )
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
@@ -29,25 +33,25 @@ DATABASES = {
         'USER': os.getenv('PGSQL_USER'),
         'PASSWORD': os.getenv('PGSQL_SECRET'),
         'HOST': os.getenv('PGSQL_HOST'),
-        'PORT': os.getenv('PGSQL_PORT', '5432',
+        'PORT': os.getenv('PGSQL_PORT', '5432'),
     }
 }
 
-# Update database configuration with $DATABASE_URL.
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
-
 FTPD_HOST = '0.0.0.0'
 FTPD_PORT = 2121
-FTPD_ROOT = os.path.join(TERO_CONFIG_DIR, 'ftp')
+FTPD_ROOT = os.path.join(TERO_ROOT_DIR, 'ftp')
 if not os.path.exists(FTPD_ROOT):
     os.makedirs(FTPD_ROOT)
 
+IMAGES_PROXY_URL = 'http://localhost:8000/images/upload'
 
+TERO_LOG_DIR = os.path.join(TERO_ROOT_DIR, 'logs')
+if not os.path.exists(TERO_LOG_DIR):
+    os.makedirs(TERO_LOG_DIR)
 LOGGING_DEFAULT_LEVEL = 'DEBUG'
 LOGGING_CONSOLE_HANDLER = 'console'
 LOGGING_FILE_HANDLER = 'file_default'
-LOGGING_DEFAULT_HANDLERS = [LOGGING_CONSOLE_HANDLER]
+LOGGING_DEFAULT_HANDLERS = [LOGGING_CONSOLE_HANDLER, LOGGING_FILE_HANDLER]
 
 # Logging config
 LOGGING = {
@@ -67,22 +71,29 @@ LOGGING = {
         },
     },
     'handlers': {
-        'console': {
-            'level': 'DEBUG',
+        LOGGING_CONSOLE_HANDLER: {
+            'level': LOGGING_DEFAULT_LEVEL,
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
             'filters': ['require_debug_true'],
         },
+        LOGGING_FILE_HANDLER: {
+            'level': LOGGING_DEFAULT_LEVEL,
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(TERO_LOG_DIR, 'dj-tero.log'),
+            'formatter': 'verbose',
+            'filters': [],
+        },
     },
     'loggers': {
         'django': {
-            'handlers': LOGGING_DEFAULT_HANDLERS,
+            'handlers': [LOGGING_CONSOLE_HANDLER],
             'level': 'INFO',
             'propagate': False,
         },
         'django.request': {
-            'handlers': LOGGING_DEFAULT_HANDLERS,
-            'level': LOGGING_DEFAULT_LEVEL,
+            'handlers': [LOGGING_CONSOLE_HANDLER],
+            'level': 'INFO',
             'propagate': False,
         },
         'ftpd': {
@@ -97,3 +108,18 @@ LOGGING = {
         },
     }
 }
+
+# Django channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(os.getenv('REDIS_HOST'), 6379)],
+        },
+        "ROUTING": "settings.routing.channel_routing",
+    },
+}
+
+# Telegram app
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TELEGRAM_API_URL = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/'

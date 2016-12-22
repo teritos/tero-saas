@@ -35,6 +35,7 @@ INSTALLED_APPS += [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_extensions',
+    'channels',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -124,5 +125,18 @@ FIXTURE_DIRS = [os.path.join(PROJECT_ROOT, 'fixtures')]
 FTPD_ROOT = ''
 FTPD_HOST = ''
 FTPD_PORT = 0
+FTPD_PASSIVE_PORTS_MIN = 30000
+FTPD_PASSIVE_PORTS_MAX = 31000
 
 LOGGING_DEFAULT_LEVEL = 'ERROR'
+
+# Django channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("172.17.0.2", 6379)],
+        },
+        "ROUTING": "settings.routing.channel_routing",
+    },
+}
