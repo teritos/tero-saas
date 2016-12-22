@@ -1,6 +1,11 @@
 import os
 
 from settings.base_settings import *
+from dotenv import load_dotenv
+
+
+dotenv_path = os.path.join(PROJECT_ROOT, '.env')
+load_dotenv(dotenv_path)
 
 DEBUG = True
 
