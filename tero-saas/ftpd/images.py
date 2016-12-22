@@ -4,8 +4,8 @@ from pathlib import (
 )
 from itertools import tee
 from threading import Thread
-from tero.deep import run_detector
-from tero.images import compare
+from libtero.deep import run_detector
+from libtero.images import compare
 from settings.asgi import channel_layer
 from alarm.models import (
     AlarmImage,
