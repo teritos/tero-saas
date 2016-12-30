@@ -10,7 +10,6 @@ services:
       - "8000:8000"
       - "2121:2121"
     volumes:
-      - ./pipcache:/root/.cache/pip
       - ./tero-docker/entrypoint.sh:/entrypoint.sh
       - ..:/tero
       - ../../libtero:/libtero

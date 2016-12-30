@@ -1,3 +1,4 @@
+
 [circus]
 statsd = 1
 httpd = 0
@@ -12,19 +13,20 @@ copy_env = True
 working_dir =
 
 [watcher:worker]
-cmd = python manage.py runworker
+cmd = /env/bin/python3 manage.py runworker
 numprocesses = 1
 copy_env = True
 virtualenv =
 
 [watcher:ftpd]
-cmd = python manage.py runftpdserver 
+cmd = /env/bin/python3 manage.py runftpdserver 
 numprocesses = 1
 copy_env = True
 virtualenv =
 
 [env:daphne]
 PYTHONPATH =
+PYTHON = /env/bin/python3
 DJANGO_SETTINGS_MODULE = settings.dev_settings
 DJANGO_DEBUG = 'true' 
 DEEPINI =
@@ -40,8 +42,8 @@ DJANGO_MEDIA_ROOT =
 
 [env:worker]
 PYTHONPATH =
-DJANGO_SETTINGS_MODULE =
-DJANGO_DEBUG = 'false' 
+DJANGO_SETTINGS_MODULE = settings.dev_settings
+DJANGO_DEBUG = 'true' 
 DEEPINI =
 PGSQL_NAME = tero
 PGSQL_USER = tero
@@ -55,8 +57,8 @@ DJANGO_MEDIA_ROOT =
 
 [env:ftpd]
 PYTHONPATH =
-DJANGO_SETTINGS_MODULE =
-DJANGO_DEBUG = 'false' 
+DJANGO_SETTINGS_MODULE = settings.dev_settings
+DJANGO_DEBUG = 'true' 
 DEEPINI =
 PGSQL_NAME = tero
 PGSQL_USER = tero

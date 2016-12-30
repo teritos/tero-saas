@@ -2,7 +2,7 @@ import logging
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from ftpd.server import AlarmFTPServer, NotificationFTPHandler, ProxyFTPHandler
+from ftpd.server import AlarmFTPServer, NotificationFTPHandler, ColoProxyFTPHandler
 
 
 logger = logging.getLogger(__name__)
