@@ -1,0 +1,58 @@
+"""FTPD Server handlers."""
+
+import os
+import logging
+import datetime
+from pathlib import PurePath
+from django.conf import settings
+from settings.asgi import channel_layer
+from pyftpdlib.handlers import FTPHandler
+
+
+logger = logging.getLogger("ftpd")  # pylint: disable=C0103
+
+
+class DjangoChannelsFTPHandler(FTPHandler):
+    """Tero FTP Handler."""
+
+    passive_ports = list(range(settings.FTPD_PASSIVE_PORTS_MIN, settings.FTPD_PASSIVE_PORTS_MAX))
+    masquerade_address = os.getenv('FTPD_MASQUERADE_ADDRESS')
+
+    def __init__(self, conn, server, ioloop=None):
+        logger.debug("Initializing FTP Notification handler...")
+        super(DjangoChannelsFTPHandler, self).__init__(conn, server, ioloop)
+
+    def on_connect(self):
+        """User connected."""
+        logger.debug("%s:%s connected", self.remote_ip, self.remote_port)
+
+    def on_disconnect(self):
+        """User disconnected."""
+        logger.debug("%s:%s disconnected", self.remote_ip, self.remote_port)
+
+    def on_login(self, username):
+        """User logs in."""
+        logger.debug("%s logged in!", username)
+
+    def on_logout(self, username):
+        """User logs out."""
+        logger.debug("%s logged out!", username)
+
+    def on_file_received(self, filepath):
+        """File received."""
+        logger.info("File received %s", filepath)
+        self._send_notifications(filepath)
+
+    def on_incomplete_file_received(self, filepath):
+        """Incomplete File received."""
+        logger.info("Incomplete file received %s", filepath)
+        self._send_notifications(filepath)
+
+    def _send_notifications(self, filepath):
+        """Send a notification."""
+        channel_layer.send('mordor.see', {
+            'path': filepath,
+            'purePath': PurePath(filepath),
+            'username': self.username,
+            'datetime': datetime.datetime.now().strftime('%d/%m/%Y %h:%m:%s')
+        })

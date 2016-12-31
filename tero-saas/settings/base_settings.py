@@ -4,9 +4,8 @@ import os
 
 # /tero/app
 BASE_DIR = os.path.abspath(
-                        os.path.join(os.path.join(
-                                    os.path.dirname(__file__),
-                                    os.path.pardir)))
+    os.path.join(os.path.join(os.path.dirname(__file__), os.path.pardir))
+)
 
 # /tero
 PROJECT_ROOT = BASE_DIR  # os.path.abspath(os.path.join(BASE_DIR, os.path.pardir))
@@ -135,7 +134,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("172.17.0.2", 6379)],
+            "hosts": [('redis', 6379)],
         },
         "ROUTING": "settings.routing.channel_routing",
     },
