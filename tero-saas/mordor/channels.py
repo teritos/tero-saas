@@ -16,6 +16,7 @@ def send_message_by_ws(message, username):
 
 def send_message_to_group(message, group_name):
     """Send message to a group."""
+    assert isinstance(message, dict), "message must be a dict instance."
     group = Group(group_name)
     group.send(message)
 
