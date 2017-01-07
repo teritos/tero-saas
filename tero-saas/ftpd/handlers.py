@@ -7,6 +7,7 @@ from pathlib import PurePath
 from django.conf import settings
 from settings.asgi import channel_layer
 from pyftpdlib.handlers import FTPHandler
+from ftpd.images import ImageHandler
 
 
 logger = logging.getLogger("ftpd")  # pylint: disable=C0103
@@ -50,6 +51,11 @@ class DjangoChannelsFTPHandler(FTPHandler):
 
     def handle_file_received(self, filepath):
         """Send a notification."""
+        image = ImageHandler(filepath=filepath, username=self.username)
+
+        if image.is_similar():
+            return
+
         channel_layer.send('mordor.see', {
             'path': filepath,
             'purePath': PurePath(filepath),
