@@ -45,3 +45,10 @@ class Login(View):
             return render(template_name='login.html',
                           request=request,
                           context={'form': form})
+
+
+class Logout(View):
+    def get(self, request):
+        logout(request)
+        return render(template_name='login.html',
+                      request=request)
