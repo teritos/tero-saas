@@ -38,7 +38,9 @@ class Login(View):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return HttpResponse('loggedin')
+            return render(template_name='login.html',
+                          request=request,
+                          context={'form': LoginUser()})
         else:
             return render(template_name='login.html',
                           request=request,

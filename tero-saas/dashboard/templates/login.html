@@ -2,9 +2,15 @@
 {% load bootstrap %}
 
 {% block content %}
-<form method="post" action="{% url 'login' %}" class="form-signin">{% csrf_token %}
-	<h2 class="form-signup-heading">Please sign in</h2>
-	{{ form|bootstrap }}
-	<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-</form>
+
+	{% if user.is_authenticated %}
+	   <h1>Logueado!</h1>
+	{% else %}
+		<form method="post" action="{% url 'login' %}" class="form-signin">{% csrf_token %}
+			<h2 class="form-signup-heading">Please sign in</h2>
+			{{ form|bootstrap }}
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+		</form>
+	{% endfor %}
+
 {% endblock %}
