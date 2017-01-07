@@ -4,6 +4,7 @@ import redis
 from multiprocessing import Process
 
 from libtero.deep import run_detector
+from libtero.images import ImageHash
 from alarm.models import (
     AlarmImage,
     Alarm
