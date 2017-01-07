@@ -24,18 +24,18 @@ def run_detector(image_path, cfg=None):
 
     config = configparser.ConfigParser()
     config.read(cfg or os.getenv('DEEPINI'))
+
     deepnet = config['DEEPNET']
-    bin_    = deepnet['DeepNeuralBinary']
-    cfg     = deepnet['Cfg']
-    data    = deepnet['Data']
-    weights = deepnet['Weights']
     os.chdir(deepnet['Chdir'])
 
-    cmd = '{} detector test {} {} {} {}'.format(bin_, data, cfg, weights, image_path)
+    cmd = './{deepneuralbinary} detector test {data} {cfg} {weights} {path}'.format(
+        path=image_path, **deepnet
+    )
+
     cmd = shlex.split(cmd)
 
-    completed_process = subprocess.run(cmd, stdout=subprocess.PIPE)
-    data = parse_predicted(completed_process.stdout.split(b'\n'))
+    completed_process = subprocess.check_output(cmd)
+    data = parse_predicted(completed_process.split(b'\n'))
     data.update({'saved': PurePath(deepnet['Chdir'], data['saved'].decode('utf-8'))})
 
     return data 

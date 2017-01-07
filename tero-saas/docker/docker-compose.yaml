@@ -1,0 +1,35 @@
+version: '2'
+services:
+  tero:
+    build: ./tero-docker
+    command: runserver
+    entrypoint: /entrypoint.sh
+    tty: true
+    stdin_open: true 
+    ports:
+      - "8000:8000"
+      - "2121:2121"
+    volumes:
+      - ./tero-docker/entrypoint.sh:/entrypoint.sh
+      - ..:/tero
+      - ../../libtero:/libtero
+      - ../../darknet:/darknet
+    links:
+      - pgsql:pgsql
+      - redis:redis
+    environment:
+      - DJANGO_DEBUG=True
+      - DJANGO_LOGS=/tmp/
+  redis:
+    image: redis
+  pgsql:
+    restart: always
+    image: kiasaki/alpine-postgres:9.5
+    environment:
+      - POSTGRES_USER:'tero'
+      - POSTGRES_PASSWORD:'tero'
+      - POSTGRES_DB:'tero'
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database:/var/lib/postgresql/data

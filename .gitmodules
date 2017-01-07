@@ -1,3 +1,4 @@
 [submodule "darknet"]
-	path = darknet
-	url = https://github.com/edvm/darknet
+    path = darknet
+    url = https://github.com/edvm/darknet
+    ignore = dirty

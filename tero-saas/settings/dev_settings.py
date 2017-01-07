@@ -2,6 +2,10 @@ import os
 
 from settings.base_settings import *
 
+# from dotenv import load_dotenv
+# dotenv_path = os.path.join(PROJECT_ROOT, '.env')
+# load_dotenv(dotenv_path)
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -52,6 +56,19 @@ LOGGING_DEFAULT_HANDLERS = [LOGGING_CONSOLE_HANDLER, LOGGING_FILE_HANDLER]
 # Telegram app
 TELEGRAM_BOT_TOKEN = '265716638:AAF13GJ7tMGpI4VUTBNzfeG0XiKDXiCLW1Y'
 TELEGRAM_API_URL = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/'
+
+
+# Django channels
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [('redis', 6379)],
+        },
+        "ROUTING": "settings.routing.channel_routing",
+    },
+}
+
 
 # Logging config
 LOGGING = {
