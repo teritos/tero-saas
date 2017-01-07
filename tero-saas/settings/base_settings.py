@@ -36,6 +36,8 @@ INSTALLED_APPS += [
     'rest_framework',
     'django_extensions',
     'channels',
+    'bootstrapform',
+    'dashboard',
 ]
 
 MIDDLEWARE_CLASSES = [

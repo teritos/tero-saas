@@ -24,6 +24,18 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script type="javascript/text">
+      // Create a new WebSocket
+      ws = new WebSocket((window.location.protocol == 'http') ? 'ws://' : 'wss://' +  window.location.host + '/session_key={{ request.session.session_key }}')
+      // Make it show an alert when a message is received
+      ws.onmessage = function(message) {
+        alert(message.data);
+      }
+      // Send a new message when the WebSocket opens
+      ws.onopen = function() {
+        ws.send('Hello, world');
+      }
+    </script>
   </head>
 
   <body>
@@ -36,4 +48,3 @@
 
   </body>
 </html>
-

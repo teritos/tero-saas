@@ -1,4 +1,4 @@
-import os 
+import os
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -16,7 +16,11 @@ class Alarm(models.Model):
     def create(cls, username, password):
         """Create a new alarm."""
         alarm = cls()
-        alarm.owner = User.objects.create_user(username, password=password) 
+        user, created = User.objects.get_or_create(username=username)
+        if created is True:
+            user.password = password
+            user.save()
+        alarm.owner = user
         alarm.save()
 
         ftp_account = FTPAccount(alarm=alarm)
