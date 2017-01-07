@@ -36,6 +36,8 @@ INSTALLED_APPS += [
     'rest_framework',
     'django_extensions',
     'channels',
+    'bootstrapform',
+    'dashboard',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -135,7 +137,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("172.17.0.2", 6379)],
+            "hosts": [("127.0.0.1", 6379)],
         },
         "ROUTING": "settings.routing.channel_routing",
     },

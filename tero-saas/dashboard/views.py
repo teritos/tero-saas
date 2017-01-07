@@ -8,6 +8,7 @@ from django.contrib.auth import (
     authenticate
 )
 
+from alarm.models import Alarm
 from .forms import (
     CreateUser,
     LoginUser
@@ -20,8 +21,10 @@ class Register(FormView):
     success_url = '/dash/login'
 
     def form_valid(self, form):
-        form.save()
+        user = form.save()
+        Alarm.create(user.username, form.cleaned_data['password1'])
         return super(Register, self).form_valid(form)
+
 
 class Login(View):
 
@@ -32,7 +35,6 @@ class Login(View):
 
     def post(self, request):
         form = LoginUser(data=request.POST)
-        import pdb;pdb.set_trace()
         if form.is_valid():
             user = form.get_user()
             login(request, user)
