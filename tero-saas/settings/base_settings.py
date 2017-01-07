@@ -142,3 +142,50 @@ CHANNEL_LAYERS = {
         "ROUTING": "settings.routing.channel_routing",
     },
 }
+
+LOGDIR = os.getenv('DJANGO_LOGS', '/logs')
+os.makedirs(LOGDIR, exist_ok=True)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'maxBytes' : 1024*1024*20, # 10MB
+            'backupCount': 3,
+            'formatter': 'simple',
+            'filename': os.path.join(LOGDIR, 'debug.log'),
+        },
+        'mordor.handler': {
+            'level': 'DEBUG',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'maxBytes' : 1024*1024*20, # 10MB
+            'backupCount': 3,
+            'formatter': 'simple',
+            'filename': os.path.join(LOGDIR, 'mordor.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'mordor': {
+            'handlers': ['console', 'mordor.handler'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}
