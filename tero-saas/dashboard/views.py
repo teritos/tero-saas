@@ -5,7 +5,8 @@ from django.shortcuts import render
 from django.views.generic.edit import FormView
 from django.contrib.auth import (
     login,
-    authenticate
+    authenticate,
+    logout
 )
 
 from alarm.models import Alarm
@@ -51,4 +52,5 @@ class Logout(View):
     def get(self, request):
         logout(request)
         return render(template_name='login.html',
-                      request=request)
+                      request=request,
+                      context={'form': LoginUser()})
