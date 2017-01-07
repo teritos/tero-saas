@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'alarm',
     'ftpd',
     'telegram',
+    'mordor',
 ]
 
 INSTALLED_APPS += [
