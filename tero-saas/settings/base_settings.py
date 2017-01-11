@@ -175,6 +175,14 @@ LOGGING = {
             'formatter': 'simple',
             'filename': os.path.join(LOGDIR, 'mordor.log'),
         },
+        'alarm.handler': {
+            'level': 'DEBUG',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'maxBytes' : 1024*1024*20, # 10MB
+            'backupCount': 3,
+            'formatter': 'simple',
+            'filename': os.path.join(LOGDIR, 'alarm.log'),
+        },
     },
     'loggers': {
         'django': {
@@ -184,6 +192,11 @@ LOGGING = {
         },
         'mordor': {
             'handlers': ['console', 'mordor.handler'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'alarm': {
+            'handlers': ['console', 'alarm.handler'],
             'level': 'DEBUG',
             'propagate': True,
         },
