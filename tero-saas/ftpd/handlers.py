@@ -57,12 +57,12 @@ class DjangoChannelsFTPHandler(FTPHandler):
         if image.is_similar():
             return
 
-        with open(filepath, 'rb') as fh:
-            encoded_image = base64.b64encode(fh.read())
+        with open(filepath, 'rb') as image:
+            encoded_image = base64.b64encode(image.read())
 
         channel_layer.send('mordor.images', {
-            'encoded': encoded_image,
+            'sender': 'ftpd',
+            'encoded_image': encoded_image,
             'username': self.username,
-            'filetype': PurePosixPath(filepath).suffix, 
-            'datetime': datetime.datetime.now().strftime('%d/%m/%Y %h:%m:%s')
+            'filetype': PurePosixPath(filepath).suffix,
         })

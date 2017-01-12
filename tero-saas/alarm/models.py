@@ -48,12 +48,12 @@ class Alarm(models.Model):
         return cls.objects.get(owner__username=username)
 
     @classmethod
-    def notify(cls, username, event_type, **kwargs):
-        """TODO"""
+    def notify(cls, event_type, *args, **kwargs):
+        """Trigger event."""
         event = getattr(cls.events, event_type, None)
         if not event:
             LOGGER.debug("Ignoring %s, event not defined.", event_type)
-        event.trigger(username, **kwargs)
+        event.trigger(*args, **kwargs)
 
     def activate(self):
         self.active = True

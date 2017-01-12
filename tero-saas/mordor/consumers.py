@@ -41,13 +41,17 @@ def handle_image(payload):
     """Handle images."""
     encoded_image = payload['encoded_image']
     filetype = payload['filetype']
-    datetime = payload['datetime']
     username = payload['username']
+    sender = payload['sender']
+
+    LOGGER.debug('Received image from %s', sender)
 
     if Alarm.is_active_for(username):
         Alarm.notify(
-            username=username,
             event_type=events.MOTION_DETECTED,
-            image=encoded_image,
+            sender=sender,
+            username=username,
+            filetype=filetype,
+            encoded_image=encoded_image,
         )
 

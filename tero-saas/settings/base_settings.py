@@ -183,6 +183,14 @@ LOGGING = {
             'formatter': 'simple',
             'filename': os.path.join(LOGDIR, 'alarm.log'),
         },
+        'telegram.handler': {
+            'level': 'DEBUG',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'maxBytes' : 1024*1024*20, # 10MB
+            'backupCount': 3,
+            'formatter': 'simple',
+            'filename': os.path.join(LOGDIR, 'telegram.log'),
+        },
     },
     'loggers': {
         'django': {
@@ -197,6 +205,11 @@ LOGGING = {
         },
         'alarm': {
             'handlers': ['console', 'alarm.handler'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'telegram': {
+            'handlers': ['console', 'telegram.handler'],
             'level': 'DEBUG',
             'propagate': True,
         },

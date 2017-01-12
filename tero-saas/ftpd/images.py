@@ -1,7 +1,6 @@
 import os
 import logging
 import redis
-from multiprocessing import Process
 
 from libtero.deep import run_detector
 from libtero.images import ImageHash
@@ -11,16 +10,18 @@ from alarm.models import (
 )
 
 
-logger = logging.getLogger("ftpd")
+logger = logging.getLogger("ftpd")  # pylint: disable=invalid-name
 
 # redis client
-r = redis.StrictRedis()
+# pylint: disable=invalid-name
+r = redis.StrictRedis(host='redis', port=6379)
 
 MOTION_TTL = os.getenv('MOTION_TTL', 60) # seconds
 SIMILARITY_THRESHOLD = os.getenv('SIMILARITY_THRESHOLD', 0.8)
 
 
 class ImageHandler(object):
+    """Handle Image."""
 
     def __init__(self, filepath=None, username=None):
         self.filepath = filepath
