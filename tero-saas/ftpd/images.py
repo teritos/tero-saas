@@ -14,7 +14,7 @@ logger = logging.getLogger("ftpd")  # pylint: disable=invalid-name
 
 # redis client
 # pylint: disable=invalid-name
-r = redis.StrictRedis(host='redis', port=6379)
+r = redis.StrictRedis(host=os.getenv('REDIS_HOST', 'redis'), port=6379)
 
 MOTION_TTL = os.getenv('MOTION_TTL', 60) # seconds
 SIMILARITY_THRESHOLD = os.getenv('SIMILARITY_THRESHOLD', 0.8)
