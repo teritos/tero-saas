@@ -20,13 +20,14 @@ services:
     environment:
       - DJANGO_DEBUG=True
       - DJANGO_LOGS=/tmp/
+      - DJANGO
   redis:
     image: redis
   pgsql:
     restart: always
     image: kiasaki/alpine-postgres:9.5
     environment:
-      - POSTGRES_USER:'tero'
+      - POSTGRES_USER:'postgres'
       - POSTGRES_PASSWORD:'tero'
       - POSTGRES_DB:'tero'
     ports:
