@@ -15,7 +15,7 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 
 TERO_ROOT_DIR = os.path.expanduser('~/.tero')
 if not os.path.isdir(TERO_ROOT_DIR):
-    os.makedirs(TERO_ROOT_DIR)
+    os.makedirs(TERO_ROOT_DIR, exist_ok=True)
 
 STATIC_URL = '/static/'
 
