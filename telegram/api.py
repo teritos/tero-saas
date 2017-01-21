@@ -5,6 +5,8 @@ from telegram.models import TelegramUser
 
 
 BASE_URL = settings.TELEGRAM_API_URL
+TELEGRAM_BOT_TOKEN = '265716638:AAGqJxPa2jnzRh-NAdSOgXxZYoaNnL0Z2aM'
+BASE_URL = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/'
 logger = logging.getLogger('telegram')  # pylint: disable=invalid-name
 
 
@@ -21,6 +23,7 @@ def send_message(username, message, filepath):
         'disable_web_page_preview': 'true',
     }
     url = ''.join((BASE_URL, 'sendMessage'))
+    print(url)
     requests.get(url, params=payload)
 
     url = ''.join((BASE_URL, 'sendPhoto'))
