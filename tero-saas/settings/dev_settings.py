@@ -40,11 +40,10 @@ STATICFILES_DIRS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('PGSQL_NAME'),
-        'USER': os.getenv('PGSQL_USER'),
-        'PASSWORD': os.getenv('PGSQL_SECRET'),
-        'HOST': os.getenv('PGSQL_HOST'),
-        'PORT': os.getenv('PGSQL_PORT', '5432'),
+        'NAME': 'tero',
+        'USER': 'postgres',
+        'PASSWORD': 'tero',
+        'HOST': 'pgsql',
     }
 }
 

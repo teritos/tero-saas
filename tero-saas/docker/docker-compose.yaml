@@ -21,12 +21,6 @@ services:
     environment:
       - DJANGO_DEBUG=True
       - DJANGO_LOGS=/tmp/
-      - POSTGRES_USER:'postgres'
-      - POSTGRES_NAME:'tero'
-      - POSTGRES_HOST:'pgsql'
-      - POSTGRES_PORT:'5432'
-      - POSTGRES_PASSWORD:'tero'
-      - POSTGRES_DB:'tero'
   redis:
     image: redis
   pgsql:

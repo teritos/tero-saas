@@ -11,6 +11,8 @@ logger = logging.getLogger('telegram')
 
 
 def watch_received_images(*args, **kwargs):
+    """Fetch IP camera images from redis and process them."""
+    _ = args
     username = kwargs.get('username')
     sender = kwargs.get('sender')
     encoded_image = kwargs.get('encoded_image')
@@ -20,5 +22,6 @@ def watch_received_images(*args, **kwargs):
 
 
 def setup_events(observable):
+    """Setup events."""
     events = observable.events[MOTION_DETECTED]
     events.handlers.add(watch_received_images)

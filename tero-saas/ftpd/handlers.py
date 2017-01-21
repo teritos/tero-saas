@@ -3,7 +3,6 @@
 import os
 import base64
 import logging
-import datetime
 from pathlib import PurePosixPath
 from django.conf import settings
 from settings.asgi import channel_layer
