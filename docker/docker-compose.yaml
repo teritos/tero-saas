@@ -13,7 +13,6 @@ services:
     volumes:
       - ./tero-docker/entrypoint.sh:/entrypoint.sh
       - ..:/tero
-      - ../../libtero:/libtero
       - ../../darknet:/darknet
     links:
       - pgsql:pgsql
