@@ -49,12 +49,12 @@ def send_text(username, text):
     requests.get(url, params=payload)
 
 
-def send_image(username, imagepath):
+def send_image(username, img_bytes):
     """Send an image to a user.
 
         Arguments:
             username        Username
-            imagepath       Path to image 
+            imagepath       Path to image
     """
     # pylint: disable=no-member
     chat_id = TelegramUser.objects.values('telegram_id').get(
@@ -64,8 +64,7 @@ def send_image(username, imagepath):
         'chat_id': chat_id,
         'disable_web_page_preview': 'true',
     }
-    # files = {'photo': open(imagepath, 'rb')}
-    files = {'photo': imagepath}
+    files = {'photo': img_bytes}
     url = ''.join((BASE_URL, 'sendPhoto'))
     response = requests.post(url, params=payload, files=files)
     logger.debug(response.status_code)

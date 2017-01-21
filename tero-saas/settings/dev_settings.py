@@ -30,10 +30,21 @@ STATICFILES_DIRS = (
 # https://warehouse.python.org/project/whitenoise/
 #STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(PROJECT_ROOT, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_ROOT, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('PGSQL_NAME'),
+        'USER': os.getenv('PGSQL_USER'),
+        'PASSWORD': os.getenv('PGSQL_SECRET'),
+        'HOST': os.getenv('PGSQL_HOST'),
+        'PORT': os.getenv('PGSQL_PORT', '5432'),
     }
 }
 
