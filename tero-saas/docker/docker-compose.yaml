@@ -9,6 +9,7 @@ services:
     ports:
       - "8000:8000"
       - "2121:2121"
+      - "30000-31000:30000-31000"
     volumes:
       - ./tero-docker/entrypoint.sh:/entrypoint.sh
       - ..:/tero
@@ -20,7 +21,11 @@ services:
     environment:
       - DJANGO_DEBUG=True
       - DJANGO_LOGS=/tmp/
-      - DJANGO
+      - POSTGRES_USER:'postgres'
+      - POSTGRES_NAME:'tero'
+      - POSTGRES_HOST:'pgsql'
+      - POSTGRES_PASSWORD:'tero'
+      - POSTGRES_DB:'tero'
   redis:
     image: redis
   pgsql:
