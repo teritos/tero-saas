@@ -9,7 +9,7 @@ services:
     ports:
       - "8000:8000"
       - "2121:2121"
-      - "30000-31000:30000-31000"
+      - "2222:2222"
     volumes:
       - ./tero-docker/entrypoint.sh:/entrypoint.sh
       - ..:/tero
@@ -24,6 +24,7 @@ services:
       - POSTGRES_USER:'postgres'
       - POSTGRES_NAME:'tero'
       - POSTGRES_HOST:'pgsql'
+      - POSTGRES_PORT:'5432'
       - POSTGRES_PASSWORD:'tero'
       - POSTGRES_DB:'tero'
   redis:
