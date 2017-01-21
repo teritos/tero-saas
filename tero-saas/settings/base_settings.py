@@ -38,9 +38,11 @@ INSTALLED_APPS += [
     'channels',
     'bootstrapform',
     'dashboard',
+    'corsheaders'
 ]
 
 MIDDLEWARE_CLASSES = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
