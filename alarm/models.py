@@ -11,10 +11,11 @@ LOGGER = logging.getLogger('mordor')
 
 class Alarm(models.Model):
     """A user alarm."""
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='alarms')
     members = models.ManyToManyField(User, related_name='alarm_members')
     active = models.BooleanField(default=False)
     joined = models.DateField(auto_now_add=True)
+    label = models.CharField(max_length=150, null=True, blank=True)
     last_modified = models.DateTimeField(auto_now=True)
 
     events = events.observable
@@ -25,7 +26,7 @@ class Alarm(models.Model):
         alarm = cls()
         user, created = User.objects.get_or_create(username=username)
         if created is True:
-            user.password = password
+            user.set_password(password)
             user.save()
         alarm.owner = user
         alarm.save()
@@ -62,6 +63,12 @@ class Alarm(models.Model):
     def images_upload_path(instance, filename):
         path = "{}/{}".format(instance.alarm.pk, filename)
         return os.path.join(instance.UPLOAD_TO, path)
+
+    def save(self, *args, **kwargs):
+        if not self.label:
+            self.label = "alarm-{}".format(self.owner.username)
+
+        super(Alarm, self).save(*args, **kwargs)
 
     def __str__(self):
         return "{} {}".format(self.owner, self.active)
