@@ -68,7 +68,18 @@ def ajax_login(request):
         })
         if form.is_valid():
             user = form.get_user()
-            return HttpResponse(json.dumps({'status': 'ok', 'message': 'Logeado'}), content_type='application/json')
-        return HttpResponse(json.dumps({'status': 'error', 'message': 'Error en autenticacion'}), status=401, content_type='application/json')
+            return HttpResponse(json.dumps({
+                'status': 'ok', 
+                'message': 'Logeado',
+                'alarms': {
+                    a.label: {'status': a.active} 
+                    for a in user.alarms.all()
+                }
+            }), content_type='application/json')
+
+        return HttpResponse(json.dumps({
+            'status': 'error', 
+            'message': 'Error en autenticacion'
+        }), status=401, content_type='application/json')
 
     return HttpResponse(content_type='application/json')
