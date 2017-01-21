@@ -16,7 +16,7 @@ def watch_received_images(*args, **kwargs):
     username = kwargs.get('username')
     sender = kwargs.get('sender')
     encoded_image = kwargs.get('encoded_image')
-    img_bytes = open(io.BytesIO(base64.b64decode(encoded_image)), 'rb')
+    img_bytes = io.BytesIO(base64.b64decode(encoded_image))
     send_image(username, img_bytes)
     logger.debug('Sent image to %s with origin %s', username, sender)
 
