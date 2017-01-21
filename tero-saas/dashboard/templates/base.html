@@ -29,7 +29,7 @@
       ws = new WebSocket((window.location.protocol == 'http') ? 'ws://' : 'ws://' +  window.location.host + '/session_key={{ request.session.session_key }}')
       // Make it show an alert when a message is received
       ws.onmessage = function(message) {
-        alert(message.data);
+        //alert(message.data);
       }
       // Send a new message when the WebSocket opens
       ws.onopen = function() {

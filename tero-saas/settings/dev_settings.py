@@ -69,6 +69,7 @@ CHANNEL_LAYERS = {
     },
 }
 
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Logging config
 LOGGING = {

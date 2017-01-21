@@ -1,6 +1,9 @@
+import json
+
 from django.http import HttpResponse
 from django.views import View
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 from django.views.generic.edit import FormView
 from django.contrib.auth import (
@@ -54,3 +57,18 @@ class Logout(View):
         return render(template_name='login.html',
                       request=request,
                       context={'form': LoginUser()})
+
+@csrf_exempt
+def ajax_login(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf8'))
+        form = LoginUser(data={
+            'username': data.get('username'),
+            'password': data.get('password')
+        })
+        if form.is_valid():
+            user = form.get_user()
+            return HttpResponse(json.dumps({'status': 'ok', 'message': 'Logeado'}), content_type='application/json')
+        return HttpResponse(json.dumps({'status': 'error', 'message': 'Error en autenticacion'}), status=401, content_type='application/json')
+
+    return HttpResponse(content_type='application/json')
