@@ -15,7 +15,7 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 
 TERO_ROOT_DIR = os.path.expanduser('~/.tero')
 if not os.path.isdir(TERO_ROOT_DIR):
-    os.makedirs(TERO_ROOT_DIR)
+    os.makedirs(TERO_ROOT_DIR, exist_ok=True)
 
 STATIC_URL = '/static/'
 
@@ -54,7 +54,7 @@ LOGGING_FILE_HANDLER = 'file_default'
 LOGGING_DEFAULT_HANDLERS = [LOGGING_CONSOLE_HANDLER, LOGGING_FILE_HANDLER]
 
 # Telegram app
-TELEGRAM_BOT_TOKEN = '265716638:AAF13GJ7tMGpI4VUTBNzfeG0XiKDXiCLW1Y'
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_API_URL = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/'
 
 
@@ -102,6 +102,30 @@ LOGGING = {
             'formatter': 'verbose',
             'filters': [],
         },
+        'file': {
+            'level': 'DEBUG',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'maxBytes' : 1024*1024*20, # 10MB
+            'backupCount': 3,
+            'formatter': 'simple',
+            'filename': os.path.join(LOGDIR, 'debug.log'),
+        },
+        'mordor.handler': {
+            'level': 'DEBUG',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'maxBytes' : 1024*1024*20, # 10MB
+            'backupCount': 3,
+            'formatter': 'simple',
+            'filename': os.path.join(LOGDIR, 'mordor.log'),
+        },
+        'telegram.handler': {
+            'level': 'DEBUG',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'maxBytes' : 1024*1024*20, # 10MB
+            'backupCount': 3,
+            'formatter': 'simple',
+            'filename': os.path.join(LOGDIR, 'telegram.log'),
+        },
     },
     'loggers': {
         'django': {
@@ -123,6 +147,16 @@ LOGGING = {
             'handlers': LOGGING_DEFAULT_HANDLERS,
             'level': LOGGING_DEFAULT_LEVEL,
             'propagate': False,
+        },
+        'mordor': {
+            'handlers': ['console', 'mordor.handler'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'telegram': {
+            'handlers': ['console', 'telegram.handler'],
+            'level': 'DEBUG',
+            'propagate': True,
         },
     }
 }

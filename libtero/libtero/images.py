@@ -29,23 +29,32 @@ def compare_ssim(fname_a, fname_b):
     return ssi
 
 
-def make_hash(fname, hashfunc=imagehash.dhash):
-    """Make image hash."""
-    img = Image.open(fname)
-    return hashfunc(img)
-
-
-def load_hash(string):
-    """Load image hash from string."""
-    return imagehash.hex_to_hash(string)
-
-
-def compare_hash(hash1, hash2):
-    """Returns a float between 0-1 on how similar given images are.
-    1 means images are the same, 0 means images are totally different.
-    Hamming distance goes from 0-64 bits.
+class ImageHash(object):
+    """
+    imagehash Wrapper
     """
 
-    distance = hash1 - hash2
-    score = 1 - distance / 64.0
-    return score
+    def __init__(self, filepath=None, hashfunc=imagehash.dhash):
+        if not filepath:
+            return
+        img = Image.open(filepath)
+        self.hash = hashfunc(img)
+
+    def compare(self, other):
+        """Returns a float between 0-1 on how similar given images are.
+        1 means images are the same, 0 means images are totally different.
+        Hamming distance goes from 0-64 bits.
+        """
+
+        distance = self.hash - other.hash
+        score = 1 - distance / 64.0
+        return score
+
+    @classmethod
+    def from_string(cls, value):
+        new = cls()
+        new.hash = imagehash.hex_to_hash(value)
+        return new
+
+    def __str__(self):
+        return str(self.hash)

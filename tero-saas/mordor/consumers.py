@@ -2,6 +2,8 @@
 
 import logging
 from mordor.channels import get_alarm_group
+from alarm.models import Alarm
+from alarm import events
 from channels.auth import channel_session_user, channel_session_user_from_http
 
 
@@ -33,3 +35,23 @@ def ws_echo(message):
     message.reply_channel.send({
         "text": message.content['text'],
     })
+
+
+def handle_image(payload):
+    """Handle images."""
+    encoded_image = payload['encoded_image']
+    filetype = payload['filetype']
+    username = payload['username']
+    sender = payload['sender']
+
+    LOGGER.debug('Received image from %s', sender)
+
+    if Alarm.is_active_for(username):
+        Alarm.notify(
+            event_type=events.MOTION_DETECTED,
+            sender=sender,
+            username=username,
+            filetype=filetype,
+            encoded_image=encoded_image,
+        )
+

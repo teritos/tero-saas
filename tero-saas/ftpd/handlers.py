@@ -1,9 +1,10 @@
 """FTPD Server handlers."""
 
 import os
+import base64
 import logging
 import datetime
-from pathlib import PurePath
+from pathlib import PurePosixPath
 from django.conf import settings
 from settings.asgi import channel_layer
 from pyftpdlib.handlers import FTPHandler
@@ -56,9 +57,12 @@ class DjangoChannelsFTPHandler(FTPHandler):
         if image.is_similar():
             return
 
-        channel_layer.send('mordor.see', {
-            'path': filepath,
-            'purePath': PurePath(filepath),
+        with open(filepath, 'rb') as image:
+            encoded_image = base64.b64encode(image.read())
+
+        channel_layer.send('mordor.images', {
+            'sender': 'ftpd',
+            'encoded_image': encoded_image,
             'username': self.username,
-            'datetime': datetime.datetime.now().strftime('%d/%m/%Y %h:%m:%s')
+            'filetype': PurePosixPath(filepath).suffix,
         })

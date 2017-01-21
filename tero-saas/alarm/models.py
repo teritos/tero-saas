@@ -1,16 +1,25 @@
 import os
+import logging
 from django.contrib.auth.models import User
 from django.db import models
 
+from alarm import events
 from ftpd.models import FTPAccount
 
 
+LOGGER = logging.getLogger('mordor')
+
+
+
 class Alarm(models.Model):
+    """A user alarm."""
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     members = models.ManyToManyField(User, related_name='alarm_members')
     active = models.BooleanField(default=False)
     joined = models.DateField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
+
+    events = events.observable
 
     @classmethod
     def create(cls, username, password):
@@ -30,11 +39,21 @@ class Alarm(models.Model):
 
     @classmethod
     def is_active_for(cls, username):
+        # pylint: disable=no-member
         return cls.objects.values('active').get(owner__username=username).get('active')
 
     @classmethod
     def get_by_username(cls, username):
+        # pylint: disable=no-member
         return cls.objects.get(owner__username=username)
+
+    @classmethod
+    def notify(cls, event_type, *args, **kwargs):
+        """Trigger event."""
+        event = getattr(cls.events, event_type, None)
+        if not event:
+            LOGGER.debug("Ignoring %s, event not defined.", event_type)
+        event.trigger(*args, **kwargs)
 
     def activate(self):
         self.active = True
