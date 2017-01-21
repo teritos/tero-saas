@@ -8,8 +8,6 @@ services:
     stdin_open: true 
     ports:
       - "8000:8000"
-      - "2121:2121"
-      - "2222:2222"
     volumes:
       - ./tero-docker/entrypoint.sh:/entrypoint.sh
       - ..:/tero
