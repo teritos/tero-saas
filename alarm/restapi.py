@@ -25,3 +25,18 @@ class AlarmView(APIView):
             alarm = get_object_or_404(Alarm, pk=pk, owner=request.user)
         serialized = AlarmSerializer(alarm)
         return Response(serialized.data)
+
+    def put(self, request, pk):  # pylint: disable=C0103,R0201,W0613
+        """Update an alarm by its pk."""
+        if request.user.is_superuser:
+            alarm = get_object_or_404(Alarm, pk=pk)
+        else:
+            alarm = get_object_or_404(Alarm, pk=pk, owner=request.user)
+
+        if request.data.get('status'):
+            alarm.activate()
+        else:
+            alarm.deactivate()
+
+        serialized = AlarmSerializer(alarm)
+        return Response(serialized.data)
