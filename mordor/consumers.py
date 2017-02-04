@@ -1,9 +1,9 @@
 """Mordor channel consumers."""
 
 import logging
+import alarm.events
 from mordor.channels import get_alarm_group
-from alarm.models import Alarm
-from alarm import events
+from alarm.models import Alarm  # pylint: disable=C0412
 from channels.auth import channel_session_user, channel_session_user_from_http
 
 
@@ -48,10 +48,9 @@ def handle_image(payload):
 
     if Alarm.is_active_for(username):
         Alarm.notify(
-            event_type=events.MOTION_DETECTED,
+            Event=alarm.events.MotionDetected,
             sender=sender,
             username=username,
             filetype=filetype,
             encoded_image=encoded_image,
         )
-

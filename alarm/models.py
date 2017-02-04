@@ -2,6 +2,7 @@
 
 import os
 import logging
+import zope.event
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -44,8 +45,16 @@ class Alarm(models.Model):
         return cls.objects.get(owner__username=username)
 
     @classmethod
-    def notify(cls, event_type, *args, **kwargs):
-        """TODO: Implement"""
+    def notify(cls, Event, *args, **kwargs):
+        """Trigger an event."""
+        event = Event.GetEventInstanceFromKwargs(**kwargs)
+        zope.event.notify(event)
+
+    @staticmethod
+    def images_upload_path(instance, filename):
+        """Returns path to where upload images for this alarm."""
+        path = "{}/{}".format(instance.alarm.pk, filename)
+        return os.path.join(instance.UPLOAD_TO, path)
 
     def activate(self):
         """Set alarm as active."""
@@ -56,12 +65,6 @@ class Alarm(models.Model):
         """Set alarm as inactive."""
         self.active = False
         self.save()
-
-    @staticmethod
-    def images_upload_path(instance, filename):
-        """Returns path to where upload images for this alarm."""
-        path = "{}/{}".format(instance.alarm.pk, filename)
-        return os.path.join(instance.UPLOAD_TO, path)
 
     def save(self, *args, **kwargs):
         if not self.label:
