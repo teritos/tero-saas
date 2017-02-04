@@ -1,6 +1,6 @@
-import os
+"""Base settings."""
 
-# See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
+import os
 
 # /tero/app
 BASE_DIR = os.path.abspath(
@@ -21,8 +21,8 @@ ALLOWED_HOSTS = []
 # Application definition
 INSTALLED_APPS = [
     'alarm',
-    'telegram',
     'mordor',
+    'telegram',
 ]
 
 INSTALLED_APPS += [
@@ -105,9 +105,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-AR'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
 USE_I18N = True
 

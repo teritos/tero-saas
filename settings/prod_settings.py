@@ -1,11 +1,11 @@
 """Production settings."""
 
 import os
-from settings.base_settings import *  # pylint: skip-file
+from settings.base_settings import *  # pylint: disable=W0614,W0401
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['tero.chiba.ga']
 
 STATIC_ROOT = os.getenv('DJANGO_STATIC_ROOT')
 MEDIA_ROOT = os.getenv('DJANGO_MEDIA_ROOT')

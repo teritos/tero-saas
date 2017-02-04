@@ -1,10 +1,8 @@
+"""Settings for devel."""
+
 import os
 
-from settings.base_settings import *
-
-# from dotenv import load_dotenv
-# dotenv_path = os.path.join(PROJECT_ROOT, '.env')
-# load_dotenv(dotenv_path)
+from settings.base_settings import *  # pylint: disable=W0614,W0401
 
 DEBUG = True
 

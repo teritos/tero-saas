@@ -1,7 +1,6 @@
 ipython
 django
 django-extensions
-dj-database-url
 Pillow
 djangorestframework
 requests
@@ -13,6 +12,5 @@ daphne
 circus
 psycopg2
 django-bootstrap-form==3.2.1
-python-dotenv
 django-cors-headers
 pattern-observer
