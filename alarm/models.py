@@ -80,5 +80,12 @@ class AlarmImage(models.Model):
     image = models.ImageField(upload_to=Alarm.images_upload_path)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+
+class Device(models.Model):
+    """A user device (tablet, smartphone, etc.)"""
+    user = models.ForeignKey(User, related_name='devices')
+    onesignal_id = models.CharField(max_length=50)
+    token = models.CharField(max_length=100)
+
     def __str__(self):
-        return self.image.id
+        return self.id  # pylint: disable=E1101
