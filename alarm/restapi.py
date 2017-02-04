@@ -11,10 +11,26 @@ from alarm.serializers import AlarmSerializer
 version = 'v1'  # pylint: disable=C0103
 
 
+class AlarmListView(APIView):
+    """List alarms from a user."""
+    authentication_classes = (authentication.BasicAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    url = "%s/alarm/" % version
+
+    def get(self, request):  # pylint: disable=C0103,R0201,W0613
+        """Get an alarm by its pk."""
+        if request.user.is_superuser:
+            alarm_list = Alarm.objects.all()  # pylint: disable=E1101
+        else:
+            alarm_list = Alarm.objects.filter(owner=request.user).all()  # pylint: disable=E1101
+        serialized = AlarmSerializer(alarm_list, many=True)
+        return Response(serialized.data)
+
+
 class AlarmView(APIView):
     """API for an alarm."""
     authentication_classes = (authentication.BasicAuthentication,)
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (permissions.IsAuthenticated,)
     url = "%s/alarm/(?P<pk>[0-9])" % version
 
     def get(self, request, pk):  # pylint: disable=C0103,R0201,W0613
