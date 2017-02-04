@@ -1,9 +1,9 @@
+"""Alarm models."""
+
 import os
 import logging
 from django.contrib.auth.models import User
 from django.db import models
-
-from alarm import events
 
 
 LOGGER = logging.getLogger('mordor')
@@ -17,8 +17,6 @@ class Alarm(models.Model):
     joined = models.DateField(auto_now_add=True)
     label = models.CharField(max_length=150, null=True, blank=True)
     last_modified = models.DateTimeField(auto_now=True)
-
-    events = events.observable
 
     @classmethod
     def create(cls, username, password):
@@ -35,39 +33,39 @@ class Alarm(models.Model):
 
     @classmethod
     def is_active_for(cls, username):
+        """Return if alarm is active for given username."""
         # pylint: disable=no-member
         return cls.objects.values('active').get(owner__username=username).get('active')
 
     @classmethod
     def get_by_username(cls, username):
+        """Return alarm for given username."""
         # pylint: disable=no-member
         return cls.objects.get(owner__username=username)
 
     @classmethod
     def notify(cls, event_type, *args, **kwargs):
-        """Trigger event."""
-        event = getattr(cls.events, event_type, None)
-        if not event:
-            LOGGER.debug("Ignoring %s, event not defined.", event_type)
-        event.trigger(*args, **kwargs)
+        """TODO: Implement"""
 
     def activate(self):
+        """Set alarm as active."""
         self.active = True
         self.save()
 
     def deactivate(self):
+        """Set alarm as inactive."""
         self.active = False
         self.save()
 
     @staticmethod
     def images_upload_path(instance, filename):
+        """Returns path to where upload images for this alarm."""
         path = "{}/{}".format(instance.alarm.pk, filename)
         return os.path.join(instance.UPLOAD_TO, path)
 
     def save(self, *args, **kwargs):
         if not self.label:
             self.label = "alarm-{}".format(self.owner.username)
-
         super(Alarm, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -75,6 +73,7 @@ class Alarm(models.Model):
 
 
 class AlarmImage(models.Model):
+    """An image for an alarm"""
     UPLOAD_TO = 'alarm-images'
 
     alarm = models.ForeignKey(Alarm, related_name='images')
@@ -82,4 +81,4 @@ class AlarmImage(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.image.url
+        return self.image.id
