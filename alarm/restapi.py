@@ -67,7 +67,7 @@ class AlarmView(APIView):
 class DeviceListView(APIView):
     """List devices from a user."""
     authentication_classes = (authentication.BasicAuthentication,)
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAdminUser,)
     url = "%s/device/" % version
 
     def get(self, request):  # pylint: disable=C0103,R0201,W0613
