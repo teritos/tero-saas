@@ -91,16 +91,16 @@ class DeviceView(APIView):
         if request.user.is_superuser:
             device = get_object_or_404(Device, pk=pk)
         else:
-            device = get_object_or_404(Device, pk=pk, owner=request.user)
+            device = get_object_or_404(Device, pk=pk, user=request.user)
         serialized = DeviceSerializer(device)
         return Response(serialized.data)
 
     def put(self, request, pk):  # pylint: disable=C0103,R0201,W0613
-        """Update an alarm by its pk."""
+        """Update or create a device by its pk."""
         if request.user.is_superuser:
             device = get_object_or_404(Device, pk=pk)
         else:
-            device = get_object_or_404(Device, pk=pk, owner=request.user)
+            device, _ = Device.objects.get_or_create(pk=pk, user=request.user)  # pylint: disable=E1101
 
         for key, val in request.data:
             setattr(device, key, val)
