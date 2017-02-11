@@ -26,9 +26,9 @@ class AlarmListView(APIView):
     def get(self, request):  # pylint: disable=C0103,R0201,W0613
         """Get an alarm by its pk."""
         if request.user.is_superuser:
-            alarm_list = Alarm.objects.all()  # pylint: disable=E1101
+            alarm_list = Alarm.objects.all().order_by('id')  # pylint: disable=E1101
         else:
-            alarm_list = Alarm.objects.filter(owner=request.user).all()  # pylint: disable=E1101
+            alarm_list = Alarm.objects.filter(owner=request.user).all().order_by('id')  # pylint: disable=E1101
         serialized = AlarmSerializer(alarm_list, many=True)
         return Response(serialized.data)
 
