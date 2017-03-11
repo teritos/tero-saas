@@ -82,9 +82,10 @@ class DeviceListView(APIView):
 
 class DeviceView(APIView):
     """API for a device."""
+
     authentication_classes = (authentication.BasicAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
-    url = "%s/device/(?P<pk>[0-9])" % version
+    url = "%s/device/(?P<pk>[0-9]+)" % version
 
     def get(self, request, pk):  # pylint: disable=C0103,R0201,W0613
         """Get a user device by its pk."""
@@ -95,15 +96,25 @@ class DeviceView(APIView):
         serialized = DeviceSerializer(device)
         return Response(serialized.data)
 
-    def put(self, request, pk):  # pylint: disable=C0103,R0201,W0613
+    def get(self, request, pk):  # pylint: disable=C0103,R0201,W0613
         """Update or create a device by its pk."""
         if request.user.is_superuser:
-            device = get_object_or_404(Device, pk=pk)
+            device = get_object_or_404(Device, onesignal_id=pk)
         else:
-            device, _ = Device.objects.get_or_create(pk=pk, user=request.user)  # pylint: disable=E1101
+            device, _ = Device.objects.get_or_create(onesignal_id=pk, user=request.user)  # pylint: disable=E1101
 
-        for key, val in request.data:
-            setattr(device, key, val)
+        device.save()
+
+        serialized = DeviceSerializer(device)
+        return Response(serialized.data)
+
+    def put(self, request, pk):  # pylint: disable=C0103,R0201,W0613
+        """Update or create a device by its pk."""
+
+        device, _ = Device.objects.get_or_create(onesignal_id=pk, user=request.user)  # pylint: disable=E1101
+
+        #for key, val in request.data:
+        #    setattr(device, key, val)
         device.save()
 
         serialized = DeviceSerializer(device)
