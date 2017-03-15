@@ -13,7 +13,7 @@ def send_message(user, message, title=''):
     """Envia un mensaje de chat un dispositivo."""
 
     header = {'Content-Type': 'application/json; charset=utf-8',
-              'Authorization': settings.ONE_SIGNAL_TOKEN}
+              'Authorization': 'Basic ' + settings.ONE_SIGNAL_TOKEN}
 
     payload = {
         'app_id': settings.ONE_SIGNAL_APP_ID,

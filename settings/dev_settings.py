@@ -72,6 +72,9 @@ CHANNEL_LAYERS = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 
+ONE_SIGNAL_APP_ID = os.getenv('ONE_SIGNAL_APP_ID')
+ONE_SIGNAL_TOKEN  = os.getenv('ONE_SIGNAL_TOKEN')
+
 # Logging config
 LOGGING = {
     'version': 1,

@@ -91,4 +91,4 @@ class Device(models.Model):
     token = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.id  # pylint: disable=E1101
+        return str(self.id)  # pylint: disable=E1101
