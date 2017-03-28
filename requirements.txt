@@ -7,10 +7,10 @@ requests
 ipdb
 channels
 asgi_redis
-requests
 daphne
 circus
 psycopg2
 django-bootstrap-form==3.2.1
 django-cors-headers
 zope.event
+whitenoise
