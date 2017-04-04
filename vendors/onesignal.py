@@ -9,7 +9,7 @@ from django.conf import settings
 logger = logging.getLogger('onesignal')  # pylint: disable=C0103
 
 
-def send_message(user, message, title=''):
+def send_message(user, message, title='', data={}, big_picture=None):
     """Envia un mensaje de chat un dispositivo."""
 
     header = {'Content-Type': 'application/json; charset=utf-8',

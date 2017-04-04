@@ -6,10 +6,12 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from alarm.serializers import (
     AlarmSerializer,
+    AlarmImageSerializer,
     DeviceSerializer,
 )
 from alarm.models import (
     Alarm,
+    AlarmImage,
     Device,
 )
 
@@ -21,7 +23,7 @@ class AlarmListView(APIView):
     """List alarms from a user."""
     authentication_classes = (authentication.BasicAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
-    url = "%s/alarm/" % version
+    url = "%s/alarm/$" % version
 
     def get(self, request):  # pylint: disable=C0103,R0201,W0613
         """Get an alarm by its pk."""
@@ -33,11 +35,32 @@ class AlarmListView(APIView):
         return Response(serialized.data)
 
 
+class AlarmImageView(APIView):
+    """API for an alarm image."""
+    authentication_classes = (authentication.BasicAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+    url = "%s/alarm/images$" % version
+
+    def get(self, request):  # pylint: disable=C0103,R0201,W0613
+        """Get alarm images"""
+
+        alarms = AlarmImage.objects.filter()
+        serialized = AlarmImageSerializer(alarms, many=True)
+        return Response(serialized.data)
+
+    def list(self, request):  # pylint: disable=C0103,R0201,W0613
+        """Get alarm images"""
+
+        alarms = AlarmImage.objects.filter()
+        serialized = AlarmImageSerializer(alarms, many=True)
+        return Response(serialized.data)
+
+
 class AlarmView(APIView):
     """API for an alarm."""
     authentication_classes = (authentication.BasicAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
-    url = "%s/alarm/(?P<pk>[0-9])" % version
+    url = "%s/alarm/(?P<pk>[0-9]+)$" % version
 
     def get(self, request, pk):  # pylint: disable=C0103,R0201,W0613
         """Get an alarm by its pk."""

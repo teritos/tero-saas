@@ -3,6 +3,7 @@
 from rest_framework import serializers
 from alarm.models import (
     Alarm,
+    AlarmImage,
     Device,
 )
 
@@ -12,6 +13,13 @@ class AlarmSerializer(serializers.ModelSerializer):
     class Meta:  # pylint: disable=C0111,R0903
         model = Alarm
         fields = ('id', 'owner', 'active', 'label')
+
+
+class AlarmImageSerializer(serializers.ModelSerializer):
+    """AlarmImage Serializer."""
+    class Meta:  # pylint: disable=C0111,R0903
+        model = AlarmImage
+        fields = ('id', 'alarm', 'image')
 
 
 class DeviceSerializer(serializers.ModelSerializer):

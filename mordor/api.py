@@ -81,6 +81,7 @@ def analyze_image(imgpath, username):
             'username': username,
             'filepath': str(predicted['saved']),
         })
+        onesignal.send_message(alarm.owner, 'Persona detectada', 'Tero',data={"action": "updateImages"} big_picture="%s%s" % (settings.DOMAIN, alarm_image.image.url))
         logger.info("Pid %s >>> Saved image on DB. Alarm id %s", pid, alarm_image.id)
 
 
