@@ -3,8 +3,22 @@
 set -e
 echo "-- entrypoint.sh --"
 cd /tero/
-cp ./settings/circus.ini.template circus.ini
 
+if [ "$PRODUCTION" = "1" ]
+
+then
+
+  cp settings/circus.prod.ini circus.ini
+  cp settings/prod_asgi.py settings/asgi.py
+  cp settings/prod_manage.py manage.py
+
+else
+
+  cp settings/circus.devel.ini circus.ini
+  cp settings/dev_asgi.py settings/asgi.py
+  cp settings/dev_manage.py manage.py
+
+fi
 
 if [ ! -f /second_time ]
 then
