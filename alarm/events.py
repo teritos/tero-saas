@@ -15,7 +15,7 @@ class Event(object):
     def GetEventInstanceFromKwargs(cls, **kwargs):  # pylint: disable=C0103
         """Return an event instance with attrs taken from kwargs."""
         event = cls()
-        for key, val in kwargs:
+        for key, val in kwargs.items():
             setattr(event, key, val)
         return event
 
