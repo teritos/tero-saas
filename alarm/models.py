@@ -1,9 +1,13 @@
 """Alarm models."""
 
 import os
+import uuid
 import logging
 import zope.event
+from datetime import datetime
+from base64 import b64decode
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from django.db import models
 
 
@@ -82,6 +86,28 @@ class AlarmImage(models.Model):
     alarm = models.ForeignKey(Alarm, related_name='images')
     image = models.ImageField(upload_to=Alarm.images_upload_path)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    @staticmethod
+    def get_file_name(alarm):
+        """Returns a unique filename.
+        :param alarm    Alarm instance. 
+        """
+        uid = uuid.uuid4()
+        date = datetime.now().strftime("%d%H%m%S")
+        name = "%s-d%s-%s.jpg".format(alarm.id, date, uid)
+        return name
+
+    @classmethod
+    def create_from_encoded_data(cls, data, alarm, encoding='base64'):
+        """Create and return an AlarmImage instance from given data."""
+        b64data = b64decode(data).split('base64', 1)
+        image_name = AlarmImage.get_file_name(alarm)
+        alarm_image = cls()
+        alarm_image.alarm = alarm
+        alarm_image.image.name = image_name
+        alarm_image.image.file = ContentFile(b64data)
+        alarm_image.save()
+        return alarm_image
 
 
 class Device(models.Model):
