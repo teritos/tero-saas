@@ -3,7 +3,10 @@
 import logging
 import alarm.events
 from mordor.channels import get_alarm_group
-from alarm.models import Alarm  # pylint: disable=C0412
+from alarm.models import (
+    Alarm,
+    AlarmImage
+)
 from channels.auth import channel_session_user, channel_session_user_from_http
 
 
@@ -45,6 +48,8 @@ def handle_image(payload):
     sender = payload['sender']
 
     LOGGER.debug('Received image from %s', sender)
+    alarm_image = AlarmImage.create_from_encoded_data(encoded_image, filetype, alarm)
+    print('ALARM IMAGE URL %s' % alarm_image.url)
 
     if Alarm.is_active_for(username):
         Alarm.notify(
@@ -52,5 +57,6 @@ def handle_image(payload):
             sender=sender,
             username=username,
             filetype=filetype,
+            image_url=alarm_image.url,
             encoded_image=encoded_image,
         )

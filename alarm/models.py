@@ -88,20 +88,20 @@ class AlarmImage(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     @staticmethod
-    def get_file_name(alarm):
+    def get_file_name(alarm, filetype):
         """Returns a unique filename.
         :param alarm    Alarm instance. 
         """
         uid = uuid.uuid4()
         date = datetime.now().strftime("%d%H%m%S")
-        name = "%s-d%s-%s.jpg".format(alarm.id, date, uid)
+        name = "%s-d%s-%s.%s".format(alarm.id, date, uid, filetype)
         return name
 
     @classmethod
-    def create_from_encoded_data(cls, data, alarm, encoding='base64'):
+    def create_from_encoded_data(cls, data, filetype, alarm):
         """Create and return an AlarmImage instance from given data."""
         b64data = b64decode(data).split('base64', 1)
-        image_name = AlarmImage.get_file_name(alarm)
+        image_name = AlarmImage.get_file_name(alarm, filetype)
         alarm_image = cls()
         alarm_image.alarm = alarm
         alarm_image.image.name = image_name
