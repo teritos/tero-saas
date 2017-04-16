@@ -6,7 +6,7 @@ from settings.base_settings import *  # pylint: disable=W0614,W0401
 DEBUG = True
 
 ALLOWED_HOSTS = ['tero.ninsei.tk']
-FULL_DOMAIN = 'http://tero.ninsei.tk'
+FULL_DOMAIN = 'https://tero.ninsei.tk'
 
 STATIC_ROOT = os.getenv('DJANGO_STATIC_ROOT')
 MEDIA_ROOT = os.getenv('DJANGO_MEDIA_ROOT')
