@@ -29,5 +29,5 @@ def send_onesignal_notification(event):
     """Notify users using onesignal."""
     user = User.objects.get(username=event.username)
     message = 'Movimiento detectado.'
-    print('{} envia {} y url {}'.format(event.sender, message, event.image.url))
+    print('{} envia {} y url {}'.format(event.sender, message, event.image_url))
     onesignal.send_message(user, message, title='Tero [{}]'.format(event.sender), big_picture=event.image_url)
