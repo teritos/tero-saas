@@ -8,6 +8,7 @@ from datetime import datetime
 from base64 import b64decode
 from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
+from django.conf import settings
 from django.db import models
 
 
@@ -79,14 +80,23 @@ class Alarm(models.Model):
         return "{} {}".format(self.owner, self.active)
 
 
+def image_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/alarm-images-<id>/<filename>
+    return 'alarm-images-{0}/{1}'.format(instance.user.id, filename)
+
+
 class AlarmImage(models.Model):
     """An image for an alarm"""
-    UPLOAD_TO = 'alarm-images'
-
+    image = models.ImageField(upload_to=image_directory_path)
     alarm = models.ForeignKey(Alarm, related_name='images')
-    # image = models.ImageField(upload_to=Alarm.images_upload_path)
-    image = models.ImageField(upload_to='frula')
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def full_url(self):
+        """Return AlarmImage full url."""
+        domain = settings.FULL_DOMAIN
+        url = ''.join((domain, '/', self.image.url))
+        return url
 
     @staticmethod
     def get_file_name(alarm, filetype):
@@ -95,7 +105,9 @@ class AlarmImage(models.Model):
         """
         uid = uuid.uuid4()
         date = datetime.now().strftime("%d%H%m%S")
-        name = "{}-{}-{}.{}".format(alarm.id, date, uid, filetype)
+        if not filetype.startswith('.'):
+            filetype = ''.join(('.', filetype))
+        name = "{}-{}-{}{}".format(alarm.id, date, uid, filetype)
         return name
 
     @classmethod
@@ -110,6 +122,9 @@ class AlarmImage(models.Model):
         alarm_image.image.file = ContentFile(b64data)
         alarm_image.save()
         return alarm_image
+
+    def __str__(self):
+        return "{}".format(self.image.name)
 
 
 class Device(models.Model):
