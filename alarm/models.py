@@ -118,7 +118,7 @@ class AlarmImage(models.Model):
         image_name = AlarmImage.get_file_name(alarm, filetype)
         alarm_image = cls()
         alarm_image.alarm = alarm
-        alarm_image.save(name=image_name, content=ContentFile(b64data))
+        alarm_image.image.save(name=image_name, content=ContentFile(b64data))
         return alarm_image
 
     def __str__(self):
