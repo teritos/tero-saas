@@ -95,7 +95,7 @@ class AlarmImage(models.Model):
     def full_url(self):
         """Return AlarmImage full url."""
         domain = settings.FULL_DOMAIN
-        url = ''.join((domain, '/', self.image.url))
+        url = ''.join((domain, self.image.url))
         return url
 
     @staticmethod
