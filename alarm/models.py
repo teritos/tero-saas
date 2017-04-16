@@ -82,7 +82,7 @@ class Alarm(models.Model):
 
 def image_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/alarm-images-<id>/<filename>
-    return 'alarm-images-{0}/{1}'.format(instance.user.id, filename)
+    return 'alarm-images-{0}/{1}'.format(instance.alarm.id, filename)
 
 
 class AlarmImage(models.Model):
@@ -118,9 +118,7 @@ class AlarmImage(models.Model):
         image_name = AlarmImage.get_file_name(alarm, filetype)
         alarm_image = cls()
         alarm_image.alarm = alarm
-        alarm_image.image.name = image_name
-        alarm_image.image.file = ContentFile(b64data)
-        alarm_image.save()
+        alarm_image.save(name=image_name, content=ContentFile(b64data))
         return alarm_image
 
     def __str__(self):
