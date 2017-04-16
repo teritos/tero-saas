@@ -46,20 +46,17 @@ def handle_image(payload):
     filetype = payload['filetype']
     username = payload['username']
     sender = payload['sender']
-
     LOGGER.debug('Received image from %s', sender)
-    foo = Alarm.get_by_username(username)
-    alarm_image = AlarmImage.create_from_encoded_data(encoded_image, filetype, foo)
 
-    url = 'https://tero.ninsei.tk' + alarm_image.image.url
-    print('ALARM IMAGE URL %s' % url)
+    alarm = Alarm.get_by_username(username)
+    alarm_image = AlarmImage.create_from_encoded_data(encoded_image, filetype, alarm)
+    print('ALARM IMAGE URL %s' % alarm_image.full_url)
 
-    if Alarm.is_active_for(username):
+    if alarm.active:
         Alarm.notify(
             Event=alarm.events.MotionDetected,
             sender=sender,
             username=username,
             filetype=filetype,
-            image_url=url,
-            encoded_image=encoded_image,
+            image_url=alarm_image.full_url,
         )
