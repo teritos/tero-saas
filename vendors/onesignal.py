@@ -27,6 +27,7 @@ def send_message(user, message, title='', data={}, big_picture=None):
             'en': title,
             'es': title,
         },
+        'big_picture': big_picture
     }
 
     logger.debug('Sending onesignal notification to user %s', user)
