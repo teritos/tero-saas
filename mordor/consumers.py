@@ -1,8 +1,8 @@
 """Mordor channel consumers."""
 
 import logging
-import alarm.events
 from mordor.channels import get_alarm_group
+from alarm import events
 from alarm.models import (
     Alarm,
     AlarmImage
@@ -54,7 +54,7 @@ def handle_image(payload):
 
     if alarm.active:
         Alarm.notify(
-            Event=alarm.events.MotionDetected,
+            Event=events.MotionDetected,
             sender=sender,
             username=username,
             filetype=filetype,
