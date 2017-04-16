@@ -5,7 +5,7 @@ from settings.base_settings import *  # pylint: disable=W0614,W0401
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['tero.chiba.ga']
+ALLOWED_HOSTS = ['tero.ninsei.tk']
 
 STATIC_ROOT = os.getenv('DJANGO_STATIC_ROOT')
 MEDIA_ROOT = os.getenv('DJANGO_MEDIA_ROOT')
@@ -112,3 +112,9 @@ CHANNEL_LAYERS = {
 # Telegram app
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_API_URL = 'https://api.telegram.org/bot' + TELEGRAM_BOT_TOKEN + '/'
+
+
+# OneSignal app
+ONE_SIGNAL_APP_ID = os.getenv('ONE_SIGNAL_APP_ID')
+ONE_SIGNAL_TOKEN  = os.getenv('ONE_SIGNAL_TOKEN')
+

@@ -48,8 +48,11 @@ def handle_image(payload):
     sender = payload['sender']
 
     LOGGER.debug('Received image from %s', sender)
-    alarm_image = AlarmImage.create_from_encoded_data(encoded_image, filetype, alarm)
-    print('ALARM IMAGE URL %s' % alarm_image.url)
+    foo = Alarm.get_by_username(username)
+    alarm_image = AlarmImage.create_from_encoded_data(encoded_image, filetype, foo)
+
+    url = 'https://tero.ninsei.tk' + alarm_image.image.url
+    print('ALARM IMAGE URL %s' % url)
 
     if Alarm.is_active_for(username):
         Alarm.notify(
@@ -57,6 +60,6 @@ def handle_image(payload):
             sender=sender,
             username=username,
             filetype=filetype,
-            image_url=alarm_image.url,
+            image_url=url,
             encoded_image=encoded_image,
         )

@@ -84,7 +84,8 @@ class AlarmImage(models.Model):
     UPLOAD_TO = 'alarm-images'
 
     alarm = models.ForeignKey(Alarm, related_name='images')
-    image = models.ImageField(upload_to=Alarm.images_upload_path)
+    # image = models.ImageField(upload_to=Alarm.images_upload_path)
+    image = models.ImageField(upload_to='frula')
     timestamp = models.DateTimeField(auto_now_add=True)
 
     @staticmethod
@@ -94,13 +95,14 @@ class AlarmImage(models.Model):
         """
         uid = uuid.uuid4()
         date = datetime.now().strftime("%d%H%m%S")
-        name = "%s-d%s-%s.%s".format(alarm.id, date, uid, filetype)
+        name = "{}-{}-{}.{}".format(alarm.id, date, uid, filetype)
         return name
 
     @classmethod
     def create_from_encoded_data(cls, data, filetype, alarm):
         """Create and return an AlarmImage instance from given data."""
-        b64data = b64decode(data).split('base64', 1)
+        # b64data = b64decode(data).split('base64', 1)
+        b64data = b64decode(data)
         image_name = AlarmImage.get_file_name(alarm, filetype)
         alarm_image = cls()
         alarm_image.alarm = alarm
