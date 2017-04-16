@@ -51,8 +51,8 @@ class AlarmImageView(APIView):
     def list(self, request):  # pylint: disable=C0103,R0201,W0613
         """Get alarm images"""
 
-        alarms = AlarmImage.objects.filter()
-        serialized = AlarmImageSerializer(alarms, many=True)
+        alarm_images = AlarmImage.objects.filter(alarm__owner=request.user)
+        serialized = AlarmImageSerializer(alarm_images, many=True)
         return Response(serialized.data)
 
 
