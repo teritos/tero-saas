@@ -7,6 +7,7 @@ from settings.base_settings import *  # pylint: disable=W0614,W0401
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+FULL_DOMAIN = 'http://127.0.0.1:8000'
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
