@@ -3,7 +3,7 @@
 import os
 from settings.base_settings import *  # pylint: disable=W0614,W0401
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['tero.ninsei.tk']
 FULL_DOMAIN = 'https://tero.ninsei.tk'
