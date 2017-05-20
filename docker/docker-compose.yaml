@@ -11,6 +11,8 @@ services:
     volumes:
       - ./tero-docker/entrypoint.sh:/entrypoint.sh
       - ..:/tero
+      - ./static:/static-files
+      - ./media:/media-files
     links:
       - pgsql:pgsql
       - redis:redis
