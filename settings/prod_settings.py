@@ -1,6 +1,7 @@
 """Production settings."""
 
 import os
+import raven
 from settings.base_settings import *  # pylint: disable=W0614,W0401
 
 DEBUG = False
@@ -35,6 +36,13 @@ DATABASES = {
 }
 
 IMAGES_PROXY_URL = 'http://localhost:8000/images/upload'
+
+RAVEN_CONFIG = {
+    'dsn': os.getenv('SENTRY_DSN'),
+    # If you are using git, you can also automatically configure the
+    # release based on the git info.
+    'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
+}
 
 TERO_LOG_DIR = '/logs'
 if not os.path.exists(TERO_LOG_DIR):

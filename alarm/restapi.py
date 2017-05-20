@@ -111,15 +111,6 @@ class DeviceView(APIView):
     url = "%s/device/(?P<pk>[0-9a-zA-z\-]+)" % version
 
     def get(self, request, pk):  # pylint: disable=C0103,R0201,W0613
-        """Get a user device by its pk."""
-        if request.user.is_superuser:
-            device = get_object_or_404(Device, pk=pk)
-        else:
-            device = get_object_or_404(Device, pk=pk, user=request.user)
-        serialized = DeviceSerializer(device)
-        return Response(serialized.data)
-
-    def get(self, request, pk):  # pylint: disable=C0103,R0201,W0613
         """Update or create a device by its pk."""
         if request.user.is_superuser:
             device = get_object_or_404(Device, onesignal_id=pk)
@@ -127,6 +118,7 @@ class DeviceView(APIView):
             device, _ = Device.objects.get_or_create(onesignal_id=pk, user=request.user)  # pylint: disable=E1101
 
         device.save()
+        raise Exception('Puto toma!')
 
         serialized = DeviceSerializer(device)
         return Response(serialized.data)
@@ -139,6 +131,7 @@ class DeviceView(APIView):
         #for key, val in request.data:
         #    setattr(device, key, val)
         device.save()
+        raise Exception('Puto toma! put')
 
         serialized = DeviceSerializer(device)
         return Response(serialized.data)

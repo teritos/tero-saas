@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'alarm',
     'mordor',
     'telegram',
+    'raven.contrib.django.raven_compat',
 ]
 
 INSTALLED_APPS += [
