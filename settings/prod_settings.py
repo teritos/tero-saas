@@ -11,10 +11,6 @@ FULL_DOMAIN = 'https://tero.ninsei.tk'
 STATIC_ROOT = os.getenv('DJANGO_STATIC_ROOT')
 MEDIA_ROOT = os.getenv('DJANGO_MEDIA_ROOT')
 
-TERO_ROOT_DIR = os.path.expanduser('~/.tero')
-if not os.path.isdir(TERO_ROOT_DIR):
-    os.makedirs(TERO_ROOT_DIR)
-
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
