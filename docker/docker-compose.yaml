@@ -13,6 +13,7 @@ services:
       - ..:/tero
       - ./static:/static-files
       - ./media:/media-files
+      - ./logs:/logs
     links:
       - pgsql:pgsql
       - redis:redis
