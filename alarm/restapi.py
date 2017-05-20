@@ -118,7 +118,6 @@ class DeviceView(APIView):
             device, _ = Device.objects.get_or_create(onesignal_id=pk, user=request.user)  # pylint: disable=E1101
 
         device.save()
-        raise Exception('Puto toma!')
 
         serialized = DeviceSerializer(device)
         return Response(serialized.data)
@@ -131,7 +130,6 @@ class DeviceView(APIView):
         #for key, val in request.data:
         #    setattr(device, key, val)
         device.save()
-        raise Exception('Puto toma! put')
 
         serialized = DeviceSerializer(device)
         return Response(serialized.data)
