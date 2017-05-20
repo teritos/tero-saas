@@ -1,14 +1,15 @@
 """Mordor channel consumers."""
 
 import logging
-from mordor.channels import get_alarm_group
+
+from channels.auth import channel_session_user, channel_session_user_from_http
+
 from alarm import events
+from alarm.channels import get_alarm_group
 from alarm.models import (
     Alarm,
     AlarmImage
 )
-from channels.auth import channel_session_user, channel_session_user_from_http
-
 
 LOGGER = logging.getLogger('mordor')
 
