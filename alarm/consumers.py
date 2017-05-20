@@ -11,7 +11,7 @@ from alarm.models import (
     AlarmImage
 )
 
-LOGGER = logging.getLogger('mordor')
+LOGGER = logging.getLogger('alarm')
 
 
 @channel_session_user_from_http

@@ -161,12 +161,20 @@ LOGGING = {
             'filename': os.path.join(LOGDIR, 'debug.log'),
         },
         'alarm.handler': {
-            'level': 'ERROR',
+            'level': 'DEBUG',
             'class' : 'logging.handlers.RotatingFileHandler',
             'maxBytes' : 1024*1024*20, # 10MB
             'backupCount': 3,
             'formatter': 'simple',
             'filename': os.path.join(LOGDIR, 'alarm.log'),
+        },
+        'vision.handler': {
+            'level': 'DEBUG',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'maxBytes' : 1024*1024*20, # 10MB
+            'backupCount': 3,
+            'formatter': 'simple',
+            'filename': os.path.join(LOGDIR, 'vision.log'),
         },
         'django.handler': {
             'level': 'ERROR',
@@ -184,6 +192,10 @@ LOGGING = {
         },
         'alarm': {
             'handlers': ['alarm.handler'],
+            'propagate': True,
+        },
+        'vision': {
+            'handlers': ['vision.handler'],
             'propagate': True,
         },
     }

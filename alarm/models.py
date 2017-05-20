@@ -12,7 +12,7 @@ from django.conf import settings
 from django.db import models
 
 
-LOGGER = logging.getLogger('mordor')
+LOGGER = logging.getLogger('alarm')
 
 
 class Alarm(models.Model):
