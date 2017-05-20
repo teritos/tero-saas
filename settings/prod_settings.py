@@ -40,7 +40,7 @@ DATABASES = {
 
 IMAGES_PROXY_URL = 'http://localhost:8000/images/upload'
 
-TERO_LOG_DIR = os.path.join(TERO_ROOT_DIR, 'logs')
+TERO_LOG_DIR = '/logs'
 if not os.path.exists(TERO_LOG_DIR):
     os.makedirs(TERO_LOG_DIR)
 LOGGING_DEFAULT_LEVEL = 'DEBUG'
@@ -70,7 +70,7 @@ LOGGING = {
             'level': LOGGING_DEFAULT_LEVEL,
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
-            'filters': ['require_debug_true'],
+            'filters': [],
         },
         LOGGING_FILE_HANDLER: {
             'level': LOGGING_DEFAULT_LEVEL,
@@ -82,19 +82,19 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': [LOGGING_CONSOLE_HANDLER],
+            'handlers': [LOGGING_FILE_HANDLER],
             'level': 'INFO',
-            'propagate': False,
+            'propagate': True,
         },
         'django.request': {
-            'handlers': [LOGGING_CONSOLE_HANDLER],
+            'handlers': [LOGGING_FILE_HANDLER],
             'level': 'INFO',
-            'propagate': False,
+            'propagate': True,
         },
         'notifications': {
             'handlers': LOGGING_DEFAULT_HANDLERS,
             'level': LOGGING_DEFAULT_LEVEL,
-            'propagate': False,
+            'propagate': True,
         },
     }
 }

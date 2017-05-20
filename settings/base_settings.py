@@ -141,7 +141,7 @@ LOGDIR = os.getenv('DJANGO_LOGS', '/logs')
 os.makedirs(LOGDIR, exist_ok=True)
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'simple': {
             'format': '%(levelname)s %(asctime)s %(message)s',
@@ -149,12 +149,12 @@ LOGGING = {
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
         'file': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'class' : 'logging.handlers.RotatingFileHandler',
             'maxBytes' : 1024*1024*20, # 10MB
             'backupCount': 3,
@@ -162,7 +162,7 @@ LOGGING = {
             'filename': os.path.join(LOGDIR, 'debug.log'),
         },
         'mordor.handler': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'class' : 'logging.handlers.RotatingFileHandler',
             'maxBytes' : 1024*1024*20, # 10MB
             'backupCount': 3,
@@ -170,7 +170,7 @@ LOGGING = {
             'filename': os.path.join(LOGDIR, 'mordor.log'),
         },
         'alarm.handler': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'class' : 'logging.handlers.RotatingFileHandler',
             'maxBytes' : 1024*1024*20, # 10MB
             'backupCount': 3,
@@ -178,33 +178,37 @@ LOGGING = {
             'filename': os.path.join(LOGDIR, 'alarm.log'),
         },
         'telegram.handler': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'class' : 'logging.handlers.RotatingFileHandler',
             'maxBytes' : 1024*1024*20, # 10MB
             'backupCount': 3,
             'formatter': 'simple',
             'filename': os.path.join(LOGDIR, 'telegram.log'),
         },
+        'django.handler': {
+            'level': 'ERROR',
+            'class' : 'logging.handlers.RotatingFileHandler',
+            'maxBytes' : 1024*1024*20, # 10MB
+            'backupCount': 3,
+            'formatter': 'simple',
+            'filename': os.path.join(LOGDIR, 'django.log'),
+        }
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
+            'handlers': ['django.handler'],
             'propagate': True,
         },
         'mordor': {
-            'handlers': ['console', 'mordor.handler'],
-            'level': 'DEBUG',
+            'handlers': ['mordor.handler'],
             'propagate': True,
         },
         'alarm': {
-            'handlers': ['console', 'alarm.handler'],
-            'level': 'DEBUG',
+            'handlers': ['alarm.handler'],
             'propagate': True,
         },
         'telegram': {
-            'handlers': ['console', 'telegram.handler'],
-            'level': 'DEBUG',
+            'handlers': ['telegram.handler'],
             'propagate': True,
         },
     }
