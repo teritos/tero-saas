@@ -27,8 +27,6 @@ DATABASES = {
     }
 }
 
-IMAGES_PROXY_URL = 'http://localhost:8000/images/upload'
-
 CORS_ORIGIN_ALLOW_ALL = True
 ONE_SIGNAL_APP_ID = os.getenv('ONE_SIGNAL_APP_ID')
 ONE_SIGNAL_TOKEN  = os.getenv('ONE_SIGNAL_TOKEN')
