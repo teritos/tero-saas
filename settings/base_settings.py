@@ -21,8 +21,7 @@ ALLOWED_HOSTS = []
 # Application definition
 INSTALLED_APPS = [
     'alarm',
-    'mordor',
-    'telegram',
+    'vision',
     'raven.contrib.django.raven_compat',
 ]
 
@@ -119,8 +118,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
 
 # Fixtures
 FIXTURE_DIRS = [os.path.join(PROJECT_ROOT, 'fixtures')]
@@ -138,7 +137,7 @@ CHANNEL_LAYERS = {
     },
 }
 
-LOGDIR = os.getenv('DJANGO_LOGS', '/logs')
+LOGDIR = '/logs'
 os.makedirs(LOGDIR, exist_ok=True)
 LOGGING = {
     'version': 1,
@@ -162,29 +161,21 @@ LOGGING = {
             'formatter': 'simple',
             'filename': os.path.join(LOGDIR, 'debug.log'),
         },
-        'mordor.handler': {
-            'level': 'ERROR',
-            'class' : 'logging.handlers.RotatingFileHandler',
-            'maxBytes' : 1024*1024*20, # 10MB
-            'backupCount': 3,
-            'formatter': 'simple',
-            'filename': os.path.join(LOGDIR, 'mordor.log'),
-        },
         'alarm.handler': {
-            'level': 'ERROR',
+            'level': 'DEBUG',
             'class' : 'logging.handlers.RotatingFileHandler',
             'maxBytes' : 1024*1024*20, # 10MB
             'backupCount': 3,
             'formatter': 'simple',
             'filename': os.path.join(LOGDIR, 'alarm.log'),
         },
-        'telegram.handler': {
-            'level': 'ERROR',
+        'vision.handler': {
+            'level': 'DEBUG',
             'class' : 'logging.handlers.RotatingFileHandler',
             'maxBytes' : 1024*1024*20, # 10MB
             'backupCount': 3,
             'formatter': 'simple',
-            'filename': os.path.join(LOGDIR, 'telegram.log'),
+            'filename': os.path.join(LOGDIR, 'vision.log'),
         },
         'django.handler': {
             'level': 'ERROR',
@@ -200,16 +191,12 @@ LOGGING = {
             'handlers': ['django.handler'],
             'propagate': True,
         },
-        'mordor': {
-            'handlers': ['mordor.handler'],
-            'propagate': True,
-        },
         'alarm': {
             'handlers': ['alarm.handler'],
             'propagate': True,
         },
-        'telegram': {
-            'handlers': ['telegram.handler'],
+        'vision': {
+            'handlers': ['vision.handler'],
             'propagate': True,
         },
     }
