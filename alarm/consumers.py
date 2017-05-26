@@ -3,26 +3,27 @@
 import logging
 
 from channels.auth import channel_session_user, channel_session_user_from_http
-
+from base64 import b64decode
 from alarm import events
 from alarm.channels import get_alarm_group
 from alarm.models import (
     Alarm,
     AlarmImage
 )
+from vision.cloud import azure
 
-LOGGER = logging.getLogger('alarm')
+logger = logging.getLogger('alarm')
 
 
 @channel_session_user_from_http
 def ws_auth(message):
     """Add user to its group alarm."""
     if not message.user or message.user.is_anonymous:
-        LOGGER.debug('Invalid user %s', message.user)
+        logger.debug('Invalid user %s', message.user)
         return
     group = get_alarm_group(message.user)
     group.add(message.reply_channel)
-    LOGGER.debug('User %s added to group %s', message.user, group.name)
+    logger.debug('User %s added to group %s', message.user, group.name)
 
 
 # Connected to websocket.disconnect
@@ -31,7 +32,7 @@ def ws_disconnect(message):
     """When user disconnects, remove its group name."""
     group = get_alarm_group(message.user)
     group.discard(message.reply_channel)
-    LOGGER.debug('User %s removed from %s', message.user, group.name)
+    logger.debug('User %s removed from %s', message.user, group.name)
 
 
 def ws_echo(message):
@@ -43,15 +44,14 @@ def ws_echo(message):
 
 def handle_image(payload):
     """Handle images."""
-    encoded_image = payload['encoded_image']
+    encoded_image = payload['encoded_image']  # encoded in base64
     filetype = payload['filetype']
     username = payload['username']
     sender = payload['sender']
-    LOGGER.debug('Received image from %s', sender)
+    logger.debug('Received image from %s', sender)
 
     alarm = Alarm.get_by_username(username)
     alarm_image = AlarmImage.create_from_encoded_data(encoded_image, filetype, alarm)
-    print('ALARM IMAGE URL %s' % alarm_image.full_url)
 
     if alarm.active:
         Alarm.notify(
@@ -61,3 +61,11 @@ def handle_image(payload):
             filetype=filetype,
             image_url=alarm_image.full_url,
         )
+
+
+def get_image_tags(payload):
+    """Return tags from given image."""
+    encoded_image = payload['encoded_image']  # encoded in base64
+    image = b64decode(encoded_image)
+    tags = azure.get_image_tags(image)
+    return tags
