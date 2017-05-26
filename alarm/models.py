@@ -12,7 +12,7 @@ from django.conf import settings
 from django.db import models
 
 
-LOGGER = logging.getLogger('alarm')
+logger = logging.getLogger('alarm')
 
 
 class Alarm(models.Model):
@@ -34,6 +34,7 @@ class Alarm(models.Model):
             user.save()
         alarm.owner = user
         alarm.save()
+        logger.debug('Created alarm for user %s', user)
 
         return alarm
 
@@ -65,11 +66,13 @@ class Alarm(models.Model):
         """Set alarm as active."""
         self.active = True
         self.save()
+        logger.debug('Alarm ID %s was activated.', self.id)
 
     def deactivate(self):
         """Set alarm as inactive."""
         self.active = False
         self.save()
+        logger.debug('Alarm ID %s was deactivated.', self.id)
 
     def save(self, *args, **kwargs):
         if not self.label:
