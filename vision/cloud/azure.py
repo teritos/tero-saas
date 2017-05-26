@@ -3,7 +3,6 @@ import requests
 
 AZURE_API_ENDPOINT = os.getenv('AZURE_CLOUD_VISION_ENDPOINT')
 AZURE_ACCESS_KEY1 = os.getenv('AZURE_CLOUD_VISION_KEY1')
-AZURE_ACCESS_KEY2 = os.getenv('AZURE_CLOUD_VISION_KEY2')
 
 
 def get_image_tags(image):
