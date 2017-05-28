@@ -22,9 +22,9 @@ def handle_image(payload):
     logger.debug('Received image from %s', sender)
 
     alarm = Alarm.get_by_username(username)
-    alarm_image = AlarmImage.create_from_encoded_data(encoded_image, filetype, alarm)
 
     if alarm.active:
+        alarm_image = AlarmImage.create_from_encoded_data(encoded_image, filetype, alarm)
         Alarm.notify(
             Event=events.MotionDetected,
             sender=sender,
