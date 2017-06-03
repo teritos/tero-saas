@@ -25,7 +25,7 @@ class MotionDetected(Event):
 
 
 @zope.event.classhandler.handler(MotionDetected)
-def send_onesignal_notification(event):
+def handle_motion_detection(event):
     """Notify users using onesignal."""
     user = User.objects.get(username=event.username)
     message = 'Movimiento detectado.'
