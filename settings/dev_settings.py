@@ -22,7 +22,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'tero',
         'USER': 'postgres',
-        'PASSWORD': 'tero',
+        'PASSWORD': '',
         'HOST': 'pgsql',
     }
 }
