@@ -20,6 +20,8 @@ services:
     environment:
       - DJANGO_DEBUG=True
       - DJANGO_LOGS=/tmp/
+      - AZURE_API_ENDPOINT=${AZURE_API_ENDPOINT}
+      - AZURE_ACCESS_KEY1=${AZURE_ACCESS_KEY1}
   redis:
     image: redis
   pgsql:
