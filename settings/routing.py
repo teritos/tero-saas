@@ -7,5 +7,4 @@ channel_routing = [
     route("websocket.receive", "alarm.consumers.ws_echo"),
     route("websocket.disconnect", "alarm.consumers.ws_disconnect"),
     route("vision.images", "vision.consumers.handle_image"),
-    route("vision.image_tags", "vision.consumers.get_image_tags"),
 ]
