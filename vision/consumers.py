@@ -4,10 +4,7 @@ import logging
 
 from base64 import b64decode
 from alarm import events
-from alarm.models import (
-    Alarm,
-    AlarmImage
-)
+from alarm.models import Alarm
 from vision.cloud import azure
 
 logger = logging.getLogger('vision')
@@ -15,7 +12,7 @@ logger = logging.getLogger('vision')
 
 def handle_image(payload):
     """Handle images."""
-    encoded_image = payload['encoded_image']
+    image64 = payload['encoded_image']  # image encoded in base64
     filetype = payload['filetype']
     username = payload['username']
     sender = payload['sender']
@@ -24,13 +21,13 @@ def handle_image(payload):
     alarm = Alarm.get_by_username(username)
 
     if alarm.active:
-        alarm_image = AlarmImage.create_from_encoded_data(encoded_image, filetype, alarm)
         Alarm.notify(
             Event=events.MotionDetected,
+            alarm=alarm,
             sender=sender,
             username=username,
             filetype=filetype,
-            image_url=alarm_image.full_url,
+            image64=image64,
         )
 
 
