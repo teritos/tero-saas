@@ -19,7 +19,7 @@ class AlarmImageSerializer(serializers.ModelSerializer):
     """AlarmImage Serializer."""
     class Meta:  # pylint: disable=C0111,R0903
         model = AlarmImage
-        fields = ('id', 'alarm', 'image')
+        fields = ('id', 'alarm', 'image', 'full_url')
 
 
 class DeviceSerializer(serializers.ModelSerializer):
