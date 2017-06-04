@@ -2,7 +2,10 @@
 
 import logging
 import zope.event.classhandler
+from base64 import b64decode
 from vendors import onesignal
+from vision.cloud import azure
+from alarm.models import AlarmImage
 from django.contrib.auth.models import User
 
 
@@ -26,8 +29,20 @@ class MotionDetected(Event):
 
 @zope.event.classhandler.handler(MotionDetected)
 def handle_motion_detection(event):
-    """Notify users using onesignal."""
+    """Handle motion detection."""
+    # Save image on DB
+    image = AlarmImage.create_from_encoded_data(event.image64, event.filetype, event.alarm)
+
+    # Notify using OneSignal API
+    message = 'Movimiento detectado'
+
+    # If human detection is enabled, check it
+    if event.alarm.human_detection:
+        tag_list = azure.find_humans_on(b64decode(event.image64))
+        print(tag_list)
+        if tag_list:
+            message = 'Intrusos detectados!!!'
+    print(message)
     user = User.objects.get(username=event.username)
-    message = 'Movimiento detectado.'
-    print('{} envia {} y url {}'.format(event.sender, message, event.image_url))
-    onesignal.send_message(user, message, title='Tero [{}]'.format(event.sender), big_picture=event.image_url)
+    logger.debug('%s en Alarma %s', message, event.alarm)
+    onesignal.send_message(user, message, title='Tero [{}]'.format(event.sender), big_picture=image.full_url)
