@@ -23,6 +23,7 @@ class Alarm(models.Model):
     joined = models.DateField(auto_now_add=True)
     label = models.CharField(max_length=150, null=True, blank=True)
     last_modified = models.DateTimeField(auto_now=True)
+    human_detection = models.BooleanField(default=True)
 
     @classmethod
     def create(cls, username, password):
@@ -80,7 +81,7 @@ class Alarm(models.Model):
         super(Alarm, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "{} {}".format(self.owner, self.active)
+        return "ID {} - Owner {} Status {}".format(self.id, self.owner, self.active)
 
 
 def image_directory_path(instance, filename):
