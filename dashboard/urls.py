@@ -1,3 +1,5 @@
+"""Dashboard urls."""
+
 from django.conf.urls import url
 from .views import (
     Register,
@@ -6,6 +8,8 @@ from .views import (
     ajax_login
 )
 
+
+# pylint: disable=C0103
 urlpatterns = [
     url(r'^register$', Register.as_view(), name='register'),
     url(r'^login$', Login.as_view(), name='login'),
