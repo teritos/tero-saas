@@ -5,19 +5,12 @@
 
 	{% if user.is_authenticated %}
 		<div class="row">
-			<div class="col-xs-6 col-md-6 col-lg-6 col-xs-offset-3 col-md-offset-3 col-lg-offset-3">
-
-			<ul class="nav nav-pills">
-		  	<li role="presentation" class="active"><a href="#">Home</a></li>
-		  	<li role="presentation"><a href="#">Profile</a></li>
-		  	<li role="presentation"><a href="#">Messages</a></li>
-			</ul>
-		  <h1>Logueado!</h1>
+		  <h1>Bienvenido, {{ user }}</h1>
 		</div>
 	 </div>
 	{% else %}
 		<form method="post" action="{% url 'login' %}" class="form-signin">{% csrf_token %}
-			<h2 class="form-signup-heading">Please sign in</h2>
+			<h2 class="form-signup-heading">Ingrese sus credenciales</h2>
 			{{ form|bootstrap }}
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 		</form>

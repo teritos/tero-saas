@@ -22,6 +22,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'alarm',
     'vision',
+    'webdash',
     'raven.contrib.django.raven_compat',
 ]
 
