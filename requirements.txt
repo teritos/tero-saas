@@ -13,5 +13,3 @@ psycopg2
 django-bootstrap-form==3.2.1
 django-cors-headers
 zope.event
-whitenoise
-raven
