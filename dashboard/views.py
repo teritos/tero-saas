@@ -1,3 +1,5 @@
+"""Dashboard views."""
+
 import json
 
 from django.http import HttpResponse
@@ -8,7 +10,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import FormView
 from django.contrib.auth import (
     login,
-    authenticate,
     logout
 )
 
@@ -20,6 +21,7 @@ from .forms import (
 
 
 class Register(FormView):
+    """Register view."""
     template_name = 'register.html'
     form_class = CreateUser
     success_url = '/dash/login'
@@ -31,13 +33,15 @@ class Register(FormView):
 
 
 class Login(View):
-
+    """Login view."""
     def get(self, request):
+        """Render login form."""
         return render(template_name='login.html',
                       request=request,
                       context={'form': LoginUser()})
 
     def post(self, request):
+        """Create an user."""
         form = LoginUser(data=request.POST)
         if form.is_valid():
             user = form.get_user()
@@ -52,14 +56,18 @@ class Login(View):
 
 
 class Logout(View):
+    """Logout view."""
     def get(self, request):
+        """Log out user."""
         logout(request)
         return render(template_name='login.html',
                       request=request,
                       context={'form': LoginUser()})
 
+
 @csrf_exempt
 def ajax_login(request):
+    """Ajax Login."""
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf8'))
         form = LoginUser(data={
