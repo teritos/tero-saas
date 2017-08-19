@@ -30,21 +30,22 @@
 
   <body>
     <!--    navbar come here          -->
-    {% if user.is_authenticated %}
     <nav class="navbar navbar-toggleable-md navbar-default">
-        <a class="navbar-brand" href="{% url 'login' %}">Tero</a>
-        <div class="collapse navbar-collapse pull-md-right pull-xl-right pull-lg-right pull-sm-right pull-xs-right">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-            </ul>
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'login' %}" id="navbarToggler">Tero</a>
+            <div class="collapse navbar-collapse"> 
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        {% if user.is_authenticated %}
+                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        {% else %}
+                            <a class="nav-link" href="{% url 'register' %}">Crear cuenta</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
-    {% endif %}
     <!-- end navbar  -->
 
     <div class="wrapper">
