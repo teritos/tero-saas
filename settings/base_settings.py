@@ -22,7 +22,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'alarm',
     'vision',
-    'webdash',
     'raven.contrib.django.raven_compat',
 ]
 
@@ -156,32 +155,32 @@ LOGGING = {
         },
         'file': {
             'level': 'ERROR',
-            'class' : 'logging.handlers.RotatingFileHandler',
-            'maxBytes' : 1024*1024*20, # 10MB
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024 * 1024 * 20,  # 10MB
             'backupCount': 3,
             'formatter': 'simple',
             'filename': os.path.join(LOGDIR, 'debug.log'),
         },
         'alarm.handler': {
             'level': 'DEBUG',
-            'class' : 'logging.handlers.RotatingFileHandler',
-            'maxBytes' : 1024*1024*20, # 10MB
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024 * 1024 * 20,  # 10MB
             'backupCount': 3,
             'formatter': 'simple',
             'filename': os.path.join(LOGDIR, 'alarm.log'),
         },
         'vision.handler': {
             'level': 'DEBUG',
-            'class' : 'logging.handlers.RotatingFileHandler',
-            'maxBytes' : 1024*1024*20, # 10MB
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024 * 1024 * 20,  # 10MB
             'backupCount': 3,
             'formatter': 'simple',
             'filename': os.path.join(LOGDIR, 'vision.log'),
         },
         'django.handler': {
             'level': 'ERROR',
-            'class' : 'logging.handlers.RotatingFileHandler',
-            'maxBytes' : 1024*1024*20, # 10MB
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024 * 1024 * 20,  # 10MB
             'backupCount': 3,
             'formatter': 'simple',
             'filename': os.path.join(LOGDIR, 'django.log'),
