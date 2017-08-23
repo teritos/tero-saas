@@ -10,6 +10,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^api/', include('alarm.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^members/', include('dashboard.urls')),
+    url(r'^members/', include('web.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

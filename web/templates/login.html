@@ -10,10 +10,10 @@
 	 </div>
 	{% else %}
 		<form method="post" action="{% url 'login' %}" class="form-signin">{% csrf_token %}
-			<h2 class="form-signup-heading">Ingrese sus credenciales</h2>
+			<h2 class="form-signup-heading">Ingrese sus credenciales</h2><br />
 			{{ form|bootstrap }}
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
 		</form>
-	{% endif %}
+    {% endif %}
 
 {% endblock %}

@@ -20,6 +20,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 INSTALLED_APPS = [
+    'web',
     'alarm',
     'vision',
     'raven.contrib.django.raven_compat',
@@ -36,7 +37,6 @@ INSTALLED_APPS += [
     'django_extensions',
     'channels',
     'bootstrapform',
-    'dashboard',
     'corsheaders'
 ]
 
